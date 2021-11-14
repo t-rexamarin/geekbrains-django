@@ -1,0 +1,56 @@
+[
+  {
+    "model": "mainapp.products",
+    "pk": 1,
+    "fields": {
+      "name": "Худи черного цвета с монограммами adidas Originals",
+      "description": "Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни.",
+      "price": 6090
+    }
+  },
+  {
+    "model": "mainapp.products",
+    "pk": 2,
+    "fields": {
+      "name": "Синяя куртка The North Face",
+      "description": "Гладкая ткань. Водонепроницаемое покрытие. Легкий и теплый пуховый наполнитель.",
+      "price": 23725
+    }
+  },
+  {
+    "model": "mainapp.products",
+    "pk": 3,
+    "fields": {
+      "name": "Коричневый спортивный oversized-топ ASOS DESIGN",
+      "description": "Материал с плюшевой текстурой. Удобный и мягкий.",
+      "price": 3390
+    }
+  },
+  {
+    "model": "mainapp.products",
+    "pk": 4,
+    "fields": {
+      "name": "Черный рюкзак Nike Heritage",
+      "description": "Плотная ткань. Легкий материал.",
+      "price": 2340
+    }
+  },
+  {
+    "model": "mainapp.products",
+    "pk": 5,
+    "fields": {
+      "name": "Черные туфли на платформе с 3 парами люверсов Dr Martens 1461 Bex",
+      "description": "Гладкий кожаный верх. Натуральный материал.",
+      "price": 13590
+    }
+  },
+  {
+    "model": "mainapp.products",
+    "pk": 6,
+    "fields": {
+      "name": "Темно-синие широкие строгие брюки ASOS DESIGN",
+      "description": "Легкая эластичная ткань сирсакер Фактурная ткань.",
+      "price": 2890
+    }
+  }
+]
