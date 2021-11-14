@@ -16,4 +16,6 @@ def index(request):
 
 
 def products(request):
-    return render(request, 'products.html')
+    products = Products.objects.all()
+    context = {'Products': products}
+    return render(request, 'products.html', context)

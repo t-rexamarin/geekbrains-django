@@ -7,5 +7,4 @@ class Products(models.Model):
     description = models.TextField(verbose_name='Описание', blank=True)
     price = models.DecimalField(verbose_name='Цена', max_digits=8, decimal_places=2)
 
-    def __str__(self):
-        return self.name, self.description, self.price
+    objects = models.Manager()
