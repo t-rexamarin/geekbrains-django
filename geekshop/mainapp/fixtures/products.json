@@ -5,7 +5,8 @@
     "fields": {
       "name": "Худи черного цвета с монограммами adidas Originals",
       "description": "Мягкая ткань для свитшотов. Стиль и комфорт – это образ жизни.",
-      "price": 6090
+      "price": 6090,
+      "img_name": "Adidas-hoodie.png"
     }
   },
   {
@@ -14,7 +15,8 @@
     "fields": {
       "name": "Синяя куртка The North Face",
       "description": "Гладкая ткань. Водонепроницаемое покрытие. Легкий и теплый пуховый наполнитель.",
-      "price": 23725
+      "price": 23725,
+      "img_name": "Blue-jacket-The-North-Face.png"
     }
   },
   {
@@ -23,7 +25,8 @@
     "fields": {
       "name": "Коричневый спортивный oversized-топ ASOS DESIGN",
       "description": "Материал с плюшевой текстурой. Удобный и мягкий.",
-      "price": 3390
+      "price": 3390,
+      "img_name": "Brown-sports-oversized-top-ASOS-DESIGN.png"
     }
   },
   {
@@ -32,7 +35,8 @@
     "fields": {
       "name": "Черный рюкзак Nike Heritage",
       "description": "Плотная ткань. Легкий материал.",
-      "price": 2340
+      "price": 2340,
+      "img_name": "Black-Nike-Heritage-backpack.png"
     }
   },
   {
@@ -41,7 +45,8 @@
     "fields": {
       "name": "Черные туфли на платформе с 3 парами люверсов Dr Martens 1461 Bex",
       "description": "Гладкий кожаный верх. Натуральный материал.",
-      "price": 13590
+      "price": 13590,
+      "img_name": "Black-Dr-Martens-shoes.png"
     }
   },
   {
@@ -50,7 +55,8 @@
     "fields": {
       "name": "Темно-синие широкие строгие брюки ASOS DESIGN",
       "description": "Легкая эластичная ткань сирсакер Фактурная ткань.",
-      "price": 2890
+      "price": 2890,
+      "img_name": "Dark-blue-wide-leg-ASOs-DESIGN-trousers.png"
     }
   }
 ]
