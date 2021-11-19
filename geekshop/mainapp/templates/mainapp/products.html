@@ -7,11 +7,6 @@
 {% endblock %}
 
 
-<!--{% for product in products %}-->
-<!--    {{ product.name }} {{ product.price }}-->
-<!--{% endfor %}-->
-
-
 <!-- Page Content -->
 {% block content %}
     <div class="container">
@@ -22,11 +17,9 @@
 
                 <h1 class="my-4">GeekShop</h1>
                 <div class="list-group">
-                    <a href="#" class="list-group-item">Новинки</a>
-                    <a href="#" class="list-group-item">Одежда</a>
-                    <a href="#" class="list-group-item">Обувь</a>
-                    <a href="#" class="list-group-item">Аксессуары</a>
-                    <a href="#" class="list-group-item">Подарки</a>
+                    {% for productCategory in productsCategories %}
+                        <a href="#" class="list-group-item">{{ productCategory.name }}</a>
+                    {% endfor %}
                 </div>
 
             </div>
@@ -68,7 +61,7 @@
                             <div class="card h-100">
                                 <a href="#">
                                     <img class="card-img-top"
-                                         src="{% static product.image %}"
+                                         src="{{ product.image.url }}"
                                          alt="">
                                 </a>
                                 <div class="card-body">
