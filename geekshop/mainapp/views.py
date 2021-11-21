@@ -19,7 +19,7 @@ def products(request):
     productsCategories = ProductCategory.objects.all()
     products = Product.objects.all()
     context = {
-        'title': 'GeekShop - Каталог',
+        'title': 'GeekShop | Каталог',
         'productsCategories': productsCategories,
         'products': products
     }

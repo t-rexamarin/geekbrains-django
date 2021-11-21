@@ -1,5 +1,6 @@
 {% extends 'authapp/base.html' %}
 
+
 {% block content %}
     <div class="col-lg-7">
         <div class="alert alert-warning alert-dismissible fade show" role="alert"
@@ -68,7 +69,7 @@
                 </form>
             </div>
             <div class="card-footer text-center">
-                <div class="small"><a href="login.html">Уже есть аккаунт? Авторизоваться</a></div>
+                <div class="small"><a href="{% url 'authapp:login' %}">Уже есть аккаунт? Авторизоваться</a></div>
             </div>
         </div>
     </div>
