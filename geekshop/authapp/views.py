@@ -31,6 +31,12 @@ def login(request):
     return render(request, 'authapp/login.html', context)
 
 
+def logout(request):
+    auth.logout(request)
+
+    return HttpResponseRedirect(reverse('index'))
+
+
 def registration(request):
     if request.method == 'POST':
         form = UserRegistrationForm(data=request.POST)
