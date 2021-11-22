@@ -9,7 +9,6 @@ def index(request):
         'header': 'GeekShop Store',
         'header_info': 'Новые образы и лучшие бренды на GeekShop Store. '
                   'Бесплатная доставка по всему миру! Аутлет: до -70% Собственный бренд. -20% новым покупателям.',
-        'user': 'User from view'
     }
 
     return render(request, 'mainapp/index.html', context)

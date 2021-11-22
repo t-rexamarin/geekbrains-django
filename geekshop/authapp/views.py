@@ -19,7 +19,6 @@ def login(request):
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
         else:
-            # при дебаге он не принтует ошибке мне в консоль. Мб дело в коммунити
             print(form.errors)
     else:
         form = UserLoginForm()

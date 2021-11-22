@@ -36,7 +36,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'mainapp:products' %}">Каталог <i class="fas fa-shopping-bag"></i> </a>
                 </li>
-                {% if not user.authenticated %}
+                {% if not user.is_authenticated %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'authapp:login' %}">Войти <i class="fas fa-sign-in-alt"></i></a>
                     </li>
