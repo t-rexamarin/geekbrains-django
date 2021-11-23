@@ -1,4 +1,6 @@
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 from authapp.models import User
 
 
@@ -32,3 +34,36 @@ class UserRegistrationForm(UserCreationForm):
 
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
+
+    # сами определяем валидаторы для полей
+    def clean_username(self):
+        username = self.cleaned_data['username']
+        # я так понял, если валидаций несколько, их надо собирать в массив?
+        errors = []
+        errors_status = 0
+
+        if User.objects.filter(username=username).exists():
+            errors_status = 1
+            errors.append(ValidationError(_('Username already taken')))
+            # raise ValidationError(_('Username already taken'))
+
+        banned_usernames = ['банан', 'дурак', 'django']
+        username_l = username.lower()
+        if username_l in banned_usernames:
+            errors_status = 1
+            errors.append(ValidationError(_(f'Username {username_l} is not allowed')))
+            # raise ValidationError(_(f'Username {username_l} is not allowed'))
+
+        # пошел таким путем, только для того, чтобы нормально вызывать ValidationError и return
+        # как я понял делать return поля необходимо, хотя вывод ошибок работал и без него
+        # поясните?
+        if errors_status:
+            raise ValidationError(errors)
+
+        return username
+
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if User.objects.filter(email=email).exists():
+            raise ValidationError(_('Email already taken'))
+        return email

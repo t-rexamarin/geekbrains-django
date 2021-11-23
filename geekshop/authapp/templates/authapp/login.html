@@ -15,6 +15,29 @@
             <div class="card-body">
                 <form action="{% url 'authapp:login' %}" method="post">
                     {% csrf_token %}
+
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+
+                        <!--
+                        тут прекрасно демострируется работа form.non_field_errors
+                        если вводим невалидные данные, т.к. поля не валидируются индивидуально,
+                        получим общую ошибку, не привязанную к конкретному полю
+                        -->
+                        {% for error in form.non_field_errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+
+
+                    {% endif %}
                     <div class="form-group">
                         <label class="small mb-1" for="{{ form.username.id_for_label }}">Имя пользователя</label>
                         {{ form.username }}

@@ -16,6 +16,25 @@
             <div class="card-body">
                 <form action="{% url 'authapp:registration' %}" method="post">
                     {% csrf_token %}
+
+                    {% if form.errors %}
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endfor %}
+
+                        {% comment "пока я не знаю какие ошибки тут могут попасть, закоментил" %}
+                            {% for error in form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    <strong>{{ error|escape }}</strong>
+                                </div>
+                            {% endfor %}
+                        {% endcomment %}
+
+                    {% endif %}
                     <div class="form-row">
                         <div class="col-md-6">
                             <div class="form-group">
