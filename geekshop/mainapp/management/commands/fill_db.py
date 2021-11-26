@@ -15,7 +15,6 @@ class Command(BaseCommand):
         PRODUCTS_PATH = 'mainapp/fixtures/products.json'
 
         categories = load_from_json(CATEGORIES_PATH)
-
         ProductCategory.objects.all().delete()
         for category in categories:
             cat = category.get('fields')
@@ -24,7 +23,6 @@ class Command(BaseCommand):
             new_category.save()
 
         products = load_from_json(PRODUCTS_PATH)
-
         Product.objects.all().delete()
         for product in products:
             prod = product.get('fields')

@@ -2,42 +2,33 @@
 
 {% block content %}
     <div class="col-lg-5">
-        <div class="alert alert-warning alert-dismissible fade show" role="alert"
-             style="margin-top: 50px;">
-            <strong>Holy guacamole!</strong> You should check in on some of those fields below.
-            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-            </button>
-        </div>
+
+        {% if form.non_field_errors or messages %}
+            <div class="alert {% if messages %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show" role="alert"
+                 style="margin-top: 50px;">
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <strong>{{ message }}</strong>
+                    {% endfor %}
+                {% else %}
+                    {% for error in form.non_field_errors %}
+                        <strong>{{ error|escape }}</strong>
+                    {% endfor %}
+                {% endif %}
+
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endif %}
+
         <div class="card shadow-lg border-0 rounded-lg mt-5">
             <div class="card-header"><h3 class="text-center font-weight-light my-4">Авторизация</h3>
             </div>
             <div class="card-body">
                 <form action="{% url 'authapp:login' %}" method="post">
                     {% csrf_token %}
-
-                    {% if form.errors %}
-                        {% for field in form %}
-                            {% for error in field.errors %}
-                                <div class="alert alert-danger">
-                                    <strong>{{ error|escape }}</strong>
-                                </div>
-                            {% endfor %}
-                        {% endfor %}
-
-                        <!--
-                        тут прекрасно демострируется работа form.non_field_errors
-                        если вводим невалидные данные, т.к. поля не валидируются индивидуально,
-                        получим общую ошибку, не привязанную к конкретному полю
-                        -->
-                        {% for error in form.non_field_errors %}
-                            <div class="alert alert-danger">
-                                <strong>{{ error|escape }}</strong>
-                            </div>
-                        {% endfor %}
-
-
-                    {% endif %}
                     <div class="form-group">
                         <label class="small mb-1" for="{{ form.username.id_for_label }}">Имя пользователя</label>
                         {{ form.username }}

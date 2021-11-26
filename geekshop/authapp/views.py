@@ -1,4 +1,4 @@
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from authapp.forms import UserLoginForm, UserRegistrationForm
@@ -18,8 +18,6 @@ def login(request):
             if user.is_active:
                 auth.login(request, user)
                 return HttpResponseRedirect(reverse('index'))
-        else:
-            print(form.errors)
     else:
         form = UserLoginForm()
 
@@ -43,9 +41,9 @@ def registration(request):
 
         if form.is_valid():
             form.save()
+            success_txt = 'Registration successful.'
+            messages.success(request, success_txt)
             return HttpResponseRedirect(reverse('authapp:login'))
-        else:
-            print(form.errors)
     else:
         form = UserRegistrationForm()
 

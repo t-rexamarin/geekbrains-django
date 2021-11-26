@@ -38,25 +38,21 @@ class UserRegistrationForm(UserCreationForm):
     # сами определяем валидаторы для полей
     def clean_username(self):
         username = self.cleaned_data['username']
-        # я так понял, если валидаций несколько, их надо собирать в массив?
         errors = []
         errors_status = 0
 
         if User.objects.filter(username=username).exists():
             errors_status = 1
-            errors.append(ValidationError(_('Username already taken')))
+            errors.append(ValidationError(_('Username already taken.')))
             # raise ValidationError(_('Username already taken'))
 
         banned_usernames = ['банан', 'дурак', 'django']
         username_l = username.lower()
         if username_l in banned_usernames:
             errors_status = 1
-            errors.append(ValidationError(_(f'Username {username_l} is not allowed')))
+            errors.append(ValidationError(_(f'Username {username_l} is not allowed.')))
             # raise ValidationError(_(f'Username {username_l} is not allowed'))
 
-        # пошел таким путем, только для того, чтобы нормально вызывать ValidationError и return
-        # как я понял делать return поля необходимо, хотя вывод ошибок работал и без него
-        # поясните?
         if errors_status:
             raise ValidationError(errors)
 
@@ -65,5 +61,5 @@ class UserRegistrationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
-            raise ValidationError(_('Email already taken'))
+            raise ValidationError(_('Email already taken.'))
         return email
