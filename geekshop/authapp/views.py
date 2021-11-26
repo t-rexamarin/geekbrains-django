@@ -1,7 +1,7 @@
 from django.contrib import auth, messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
-from authapp.forms import UserLoginForm, UserRegistrationForm
+from authapp.forms import UserLoginForm, UserRegistrationForm, UserChangeProfileForm
 from django.shortcuts import render
 
 
@@ -58,6 +58,7 @@ def registration(request):
 def profile(request):
     context = {
         'title': 'GeekShop | Профиль',
+        'form': UserChangeProfileForm()
     }
 
     return render(request, 'authapp/profile.html', context)

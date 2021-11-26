@@ -1,7 +1,8 @@
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
 from authapp.models import User
+from django import forms
 
 
 class UserLoginForm(AuthenticationForm):
@@ -63,3 +64,21 @@ class UserRegistrationForm(UserCreationForm):
         if User.objects.filter(email=email).exists():
             raise ValidationError(_('Email already taken.'))
         return email
+
+
+class UserChangeProfileForm(UserChangeForm):
+    age = forms.IntegerField(widget=forms.NumberInput(), required=False)
+    image = forms.ImageField(widget=forms.FileInput(), required=False)
+
+    class Meta:
+        model = User
+        fields = ('username', 'email', 'first_name', 'last_name', 'age', 'image')
+
+    def __init__(self, *args, **kwargs):
+        super(UserChangeProfileForm, self).__init__(*args, **kwargs)
+        self.fields['username'].widget.attrs['readonly'] = True
+        self.fields['email'].widget.attrs['readonly'] = True
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control py-4'
+        self.fields['image'].widget.attrs['class'] = 'custom-file-input'
