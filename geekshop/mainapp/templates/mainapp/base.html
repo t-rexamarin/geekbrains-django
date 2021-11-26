@@ -42,7 +42,7 @@
                     </li>
                 {% else %}
                     <li class="nav-item">
-                        <a class="nav-link" href="auth/profile.html">{{ user }}
+                        <a class="nav-link" href="{% url 'authapp:profile' %}">{{ user }}
                             <i class="fas fa-user-circle"></i>
                         </a>
                     </li>

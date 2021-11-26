@@ -53,3 +53,11 @@ def registration(request):
     }
 
     return render(request, 'authapp/registration.html', context)
+
+
+def profile(request):
+    context = {
+        'title': 'GeekShop | Профиль',
+    }
+
+    return render(request, 'authapp/profile.html', context)
