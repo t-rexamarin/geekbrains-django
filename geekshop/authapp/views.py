@@ -56,9 +56,18 @@ def registration(request):
 
 
 def profile(request):
+    if request.method == 'POST':
+        form = UserChangeProfileForm(instance=request.user, data=request.POST, files=request.FILES)
+        if form.is_valid():
+            form.save()
+        else:
+            # TODO:
+            # вынести вывод ошибок в темплейт
+            print(form.errors)
+
     context = {
         'title': 'GeekShop | Профиль',
-        'form': UserChangeProfileForm()
+        'form': UserChangeProfileForm(instance=request.user)
     }
 
     return render(request, 'authapp/profile.html', context)
