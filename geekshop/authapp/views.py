@@ -8,9 +8,6 @@ from baskets.models import Basket
 
 
 # Create your views here.
-
-
-
 def login(request):
     if request.method == 'POST':
         form = UserLoginForm(data=request.POST)
@@ -65,10 +62,12 @@ def profile(request):
     if request.method == 'POST':
         form = UserChangeProfileForm(instance=request.user, data=request.POST, files=request.FILES)
         if form.is_valid():
+            success_txt = 'Changes were successfully saved.'
+            messages.success(request, success_txt)
             form.save()
         else:
-            # TODO:
-            # вынести вывод ошибок в темплейт
+            # messages.set_level(request, messages.ERROR)
+            # messages.error(request, form.errors)
             print(form.errors)
 
     context = {
