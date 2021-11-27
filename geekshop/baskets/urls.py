@@ -1,6 +1,7 @@
 from django.urls import path
+from baskets.views import basket_add
 
 app_name = 'baskets'
 urlpatterns = [
-    # path('login/', login, name='login'),
+    path('add/<int:id>/', basket_add, name='basket_add'),
 ]
