@@ -68,7 +68,10 @@ def profile(request):
         else:
             # messages.set_level(request, messages.ERROR)
             # messages.error(request, form.errors)
-            print(form.errors)
+            # print(form.errors)
+            # print(form.non_field_errors())
+            error_txt = 'Changes were successfully saved.'
+            messages.error(request, form.errors.as_json())
 
     context = {
         'title': 'GeekShop | Профиль',

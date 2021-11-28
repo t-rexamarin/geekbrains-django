@@ -10,24 +10,16 @@
         <div class="row">
             <div class="col-lg-7">
 
-                {% if form.errors or messages %}
-                    <div class="alert {% if messages %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show" role="alert"
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show" role="alert"
                          style="margin-top: 50px;">
-
-                        {% if messages %}
-                            {% for message in messages %}
-                                <strong>{{ message }}</strong>
-                            {% endfor %}
-                        {% else %}
-                            {% for error in form.errors %}
-                                <strong>{{ error|escape }}</strong>
-                            {% endfor %}
-                        {% endif %}
-
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
+                            <strong>{{ message|striptags }}</strong>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endfor %}
                 {% endif %}
 
                 <h4 class="mt-3 mb-3">Профиль</h4>

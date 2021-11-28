@@ -19,3 +19,8 @@ class NumberValidator(object):
         return _(
             "Your password must contain at least %(min_digits)d digit(s), 0-9." % {'min_digits': self.min_digits}
         )
+
+
+def clean_firstname(value):
+    if value == '111':
+        raise ValidationError(_('Firstname cannot contains 111.'))

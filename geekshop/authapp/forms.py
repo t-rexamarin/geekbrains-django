@@ -4,6 +4,8 @@ from django.utils.translation import gettext as _
 from authapp.models import User
 from django import forms
 
+from authapp.validators import clean_firstname
+
 
 class UserLoginForm(AuthenticationForm):
     class Meta:
@@ -67,6 +69,7 @@ class UserRegistrationForm(UserCreationForm):
 
 
 class UserChangeProfileForm(UserChangeForm):
+    first_name = forms.CharField(widget=forms.TextInput(), validators=[clean_firstname])
     age = forms.IntegerField(widget=forms.NumberInput(), required=False)
     image = forms.ImageField(widget=forms.FileInput(), required=False)
 
@@ -82,10 +85,3 @@ class UserChangeProfileForm(UserChangeForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
-
-    def clean_firstname(self):
-        # firstname = self.cleaned_data['firstname']
-        firstname = self.cleaned_data['first_name']
-        if not firstname.isalpha():
-            raise ValidationError(_('Firstname cannot contains numbers.'))
-        return firstname
