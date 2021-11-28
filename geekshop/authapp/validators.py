@@ -22,5 +22,20 @@ class NumberValidator(object):
 
 
 def clean_firstname(value):
+    errors = []
+    errors_status = 0
+
     if value == '111':
-        raise ValidationError(_('Firstname cannot contains 111.'))
+        errors_status = 1
+        error = ValidationError(_('Firstname cannot contains 111.'))
+        # raise ValidationError(_('Firstname cannot contains 111.'))
+        errors.append(error)
+
+    if not value.isalpha():
+        errors_status = 1
+        error = ValidationError(_('Firstname cannot contains digits.'))
+        # raise ValidationError(_('Firstname cannot contains digits.'))
+        errors.append(error)
+
+    if errors_status:
+        raise ValidationError(errors)
