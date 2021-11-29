@@ -30,4 +30,20 @@ window.onload = function() {
             });
         event.preventDefault()
     })
+
+        $('.item_card').on('click', 'button[type="button"]', function () {
+        let product_id = event.target.value
+        let product_name = event.target.getAttribute('prod_name')
+
+        $.ajax(
+            {
+                url: "/baskets/add/" + product_id + "/",
+                success: function (data){
+                    $('.card_add_basket').html(data.result)
+                    alert(`Товар ${product_name} добавлен в корзину`)
+                },
+//                errors: function()
+            });
+        event.preventDefault()
+    })
 }
