@@ -10,23 +10,16 @@
 <!-- Page Content -->
 {% block content %}
     <div class="container">
-
         <div class="row">
-
             <div class="col-lg-3">
-
                 <h1 class="my-4">GeekShop</h1>
                 <div class="list-group">
                     {% for productCategory in productsCategories %}
                         <a href="#" class="list-group-item">{{ productCategory.name }}</a>
                     {% endfor %}
                 </div>
-
             </div>
-            <!-- /.col-lg-3 -->
-
             <div class="col-lg-9">
-
                 <div id="carouselExampleIndicators" class="carousel slide my-4" data-ride="carousel">
                     <ol class="carousel-indicators">
                         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -53,33 +46,7 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
-
-                <div class="row">
-
-                    {% for product in products %}
-                        <div class="col-lg-4 col-md-6 mb-4">
-                            <div class="card h-100">
-                                <a href="#">
-                                    <img class="card-img-top"
-                                         src="{{ product.image.url }}"
-                                         alt="">
-                                </a>
-                                <div class="card-body">
-                                    <h4 class="card-title">
-                                        <a href="#">{{ product.name }}</a>
-                                    </h4>
-                                    <h5>{{ product.price }}</h5>
-                                    <p class="card-text">{{ product.short_desc }}</p>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <a href="{% url 'baskets:basket_add' product.id %}" class="btn btn-outline-success">Отправить в корзину</a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
-
-                </div>
-
+                {% include 'mainapp/includes/card.html' %}
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
                         <li class="page-item disabled">
@@ -93,11 +60,8 @@
                         </li>
                     </ul>
                 </nav>
-
             </div>
-
         </div>
-
     </div>
 {% endblock %}
 
