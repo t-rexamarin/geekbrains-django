@@ -1,4 +1,6 @@
+from django.http import JsonResponse
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from .models import Product, ProductCategory
 
 
@@ -35,3 +37,33 @@ def item(request, id):
 
     return render(request, 'mainapp/item.html', context)
 
+
+# def category(request, id):
+#     productsCategories = ProductCategory.objects.all()
+#     products = Product.objects.filter(category=id)
+#     context = {
+#         'title': 'GeekShop | Категория',
+#         'productsCategories': productsCategories,
+#         'products': products
+#     }
+#
+#     # for cat in productsCategories:
+#         # print(translit(cat, 'ru', reversed=True))
+#         # print(type(cat.name))
+#
+#     return render(request, 'mainapp/products.html', context)
+
+
+def category(request, id):
+    if request.is_ajax():
+        productsCategories = ProductCategory.objects.all()
+        products = Product.objects.filter(category=id)
+        context = {
+            'title': 'GeekShop | Категория',
+            'productsCategories': productsCategories,
+            'products': products
+        }
+
+        result = render_to_string('mainapp/includes/card.html', context)
+
+        return JsonResponse({'result': result})

@@ -16,7 +16,7 @@
                         <p class="card-text">{{ product.short_desc }}</p>
                     </div>
                     <div class="card-footer text-center">
-                        {% if product.quantity > 1 %}
+                        {% if product.quantity >= 1 %}
                             <button type="button" class="btn btn-outline-success" value="{{ product.id }}" prod_name="{{ product.name }}">
                                 Отправить в корзину
                             </button>

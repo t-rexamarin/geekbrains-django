@@ -45,10 +45,22 @@ def basket_add(request, id):
         return JsonResponse({'result': result})
 
 
+# @login_required
+# def basket_remove(request, basket_id):
+#     Basket.objects.get(id=basket_id).delete()
+#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
+
 @login_required
 def basket_remove(request, basket_id):
-    Basket.objects.get(id=basket_id).delete()
-    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+    if request.is_ajax():
+        Basket.objects.get(id=basket_id).delete()
+
+        baskets = Basket.objects.filter(user=request.user)
+        context = {'baskets': baskets}
+        result = render_to_string('baskets/basket.html', context)
+
+        return JsonResponse({'result': result})
 
 
 @login_required
