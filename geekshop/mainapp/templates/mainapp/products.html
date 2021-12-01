@@ -1,0 +1,53 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+<!-- Custom styles for this template -->
+{% block css %}
+    <link href="{% static 'css/products.css' %}" rel="stylesheet">
+{% endblock %}
+
+
+<!-- Page Content -->
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <h1 class="my-4">GeekShop</h1>
+                <div class="list-group categories">
+                    {% for productCategory in productsCategories %}
+                        {% comment %}
+<!--                        <a href="{% url 'mainapp:category' productCategory.id %}" class="list-group-item">{{ productCategory.name }}</a>-->
+                        {% endcomment %}
+                        <a href="#" class="list-group-item" category="{{ productCategory.id }}">{{ productCategory.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-lg-9">
+                {% include 'mainapp/includes/carosel.html' %}
+                {% include 'mainapp/includes/card.html' %}
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled">
+                            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item">
+                            <a class="page-link" href="#">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+<!-- Footer -->
+{% block footer %}
+    <footer class="py-5 bg-dark">
+        <div class="container">
+            <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2021</p>
+        </div>
+    </footer>
+{% endblock %}
