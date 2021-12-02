@@ -13,7 +13,7 @@ def admin_users(request):
     context = {
         'users': User.objects.all()
     }
-    return render(request, 'adminapp/admin-users-read.html')
+    return render(request, 'adminapp/admin-users-read.html', context)
 
 
 def admin_users_create(request):
