@@ -1,18 +1,18 @@
+from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
-
-
-# Create your views here.
 from django.urls import reverse
-
 from adminapp.forms import UserAdminRegisterForm, UserAdminProfileForm
 from authapp.models import User
 
 
+# Create your views here.
+@user_passes_test(lambda u: u.is_superuser)
 def index(request):
     return render(request, 'adminapp/admin.html')
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def admin_users(request):
     context = {
         'users': User.objects.all()
@@ -20,6 +20,7 @@ def admin_users(request):
     return render(request, 'adminapp/admin-users-read.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def admin_users_create(request):
     if request.method == 'POST':
         form = UserAdminRegisterForm(data=request.POST, files=request.FILES)
@@ -38,6 +39,7 @@ def admin_users_create(request):
     return render(request, 'adminapp/admin-users-create.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def admin_users_update(request, pk):
     user_select = User.objects.get(pk=pk)
 
@@ -58,6 +60,7 @@ def admin_users_update(request, pk):
     return render(request, 'adminapp/admin-users-update-delete.html', context)
 
 
+@user_passes_test(lambda u: u.is_superuser)
 def admin_users_delete(request, pk):
     if request.method == 'POST':
         user = User.objects.get(pk=pk)
