@@ -5,7 +5,6 @@ from mainapp.models import ProductCategory, Product
 
 
 class UserAdminRegisterForm(UserRegistrationForm):
-
     class Meta:
         model = User
         fields = ('username', 'email', 'age', 'image', 'first_name', 'last_name', 'password1', 'password2')
@@ -50,15 +49,18 @@ class ProductCategoryEditForm(forms.ModelForm):
         # self.fields['description'].widget.attrs['columns'] = 15
 
 
+# class ProductEditForm(forms.ModelForm):
 class ProductEditForm(forms.ModelForm):
+    image = forms.ImageField(widget=forms.FileInput())
+
     class Meta:
         model = Product
         fields = ('name', 'description', 'image', 'category', 'price', 'quantity', 'is_active')
 
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(ProductEditForm, self).__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control'
-        self.fields['description'].widget.attrs['rows'] = 1
-        # self.fields['description'].widget.attrs['columns'] = 15
+            field.widget.attrs['class'] = 'form-control py-4'
+
+        self.fields['image'].widget.attrs['class'] = 'custom-file-input'

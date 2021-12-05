@@ -156,3 +156,35 @@ def admin_products_create(request):
     }
 
     return render(request, 'adminapp/admin-products-create.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_update(request, pk):
+    product_select = Product.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        form = ProductEditForm(data=request.POST, instance=product_select, files=request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('adminapp:admin_products'))
+    else:
+        form = ProductEditForm(instance=product_select)
+
+    context = {
+        'title': 'Geekshop - Админ | Редактирование продукта',
+        'form': form,
+        'product_select': product_select,
+    }
+
+    return render(request, 'adminapp/admin-products-update-delete.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_delete(request, pk):
+    if request.method == 'POST':
+        user = Product.objects.get(pk=pk)
+        user.is_active = False
+        user.save()
+
+    return HttpResponseRedirect(reverse('adminapp:admin_products'))

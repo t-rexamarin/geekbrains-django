@@ -38,7 +38,7 @@
                                 <tbody>
                                 {% for product in products %}
                                     <tr>
-                                        <td><a href="{% url 'adminapp:admin_categories_update' product.id %}" style="color: dodgerblue">{{ product.name }}</a></td>
+                                        <td><a href="{% url 'adminapp:admin_products_update' product.id %}" style="color: dodgerblue">{{ product.name }}</a></td>
                                         <td>{{ product.description }}</td>
                                         <td>{{ product.price }}</td>
                                         <td>{{ product.quantity }}</td>
