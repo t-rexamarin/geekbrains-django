@@ -53,7 +53,7 @@ class ProductCategoryEditForm(forms.ModelForm):
 class ProductEditForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = ('name', 'description', 'image', 'price', 'quantity', 'is_active')
+        fields = ('name', 'description', 'image', 'category', 'price', 'quantity', 'is_active')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

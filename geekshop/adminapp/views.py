@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
-from adminapp.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryEditForm
+from adminapp.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryEditForm, ProductEditForm
 from authapp.models import User
 
 
@@ -137,3 +137,22 @@ def admin_products(request):
         'products': Product.objects.all()
     }
     return render(request, 'adminapp/admin-products-read.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_create(request):
+    if request.method == 'POST':
+        form = ProductEditForm(data=request.POST, files=request.FILES)
+
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('adminapp:admin_products'))
+    else:
+        form = ProductEditForm()
+
+    context = {
+        'title': 'Geekshop - Админ | Товары',
+        'form': form
+    }
+
+    return render(request, 'adminapp/admin-products-create.html', context)
