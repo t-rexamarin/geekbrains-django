@@ -55,7 +55,7 @@ def admin_users_update(request, pk):
         form = UserAdminProfileForm(instance=user_select)
 
     context = {
-        'title': 'Geekshop - Админ | Редактирование',
+        'title': 'Geekshop - Админ | Редактирование пользователя',
         'form': form,
         'user_select': user_select
     }
@@ -98,3 +98,34 @@ def admin_categories_create(request):
     }
 
     return render(request, 'adminapp/admin-categories-create.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_categories_update(request, pk):
+    category_select = ProductCategory.objects.get(pk=pk)
+
+    if request.method == 'POST':
+        form = ProductCategoryEditForm(data=request.POST, instance=category_select)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('adminapp:admin_categories'))
+    else:
+        form = ProductCategoryEditForm(instance=category_select)
+
+    context = {
+        'title': 'Geekshop - Админ | Редактирование категории',
+        'form': form,
+        'category_select': category_select
+    }
+
+    return render(request, 'adminapp/admin-categories-update-delete.html', context)
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_categories_delete(request, pk):
+    if request.method == 'POST':
+        user = ProductCategory.objects.get(pk=pk)
+        user.is_active = False
+        user.save()
+
+    return HttpResponseRedirect(reverse('adminapp:admin_categories'))

@@ -19,6 +19,7 @@
                                     <th>Описание</th>
                                     <th>Дата создания</th>
                                     <th>Дата изменения</th>
+                                    <th>Активна</th>
 <!--                                    <th>Персонал сайта</th>-->
 <!--                                    <th>Активный</th>-->
                                 </tr>
@@ -29,6 +30,7 @@
                                     <th>Описание</th>
                                     <th>Дата создания</th>
                                     <th>Дата изменения</th>
+                                    <th>Активна</th>
 <!--                                    <th>Персонал сайта</th>-->
 <!--                                    <th>Активный</th>-->
                                 </tr>
@@ -36,24 +38,17 @@
                                 <tbody>
                                 {% for category in categories %}
                                     <tr>
-                                        <td><a href="{% url 'adminapp:admin_users_update' user.id %}" style="color: dodgerblue">{{ category.name }}</a></td>
+                                        <td><a href="{% url 'adminapp:admin_categories_update' category.id %}" style="color: dodgerblue">{{ category.name }}</a></td>
                                         <td>{{ category.description }}</td>
                                         <td>{{ category.created_at }}</td>
                                         <td>{{ category.updated_at }}</td>
-<!--                                        <td class="text-center">-->
-<!--                                            {% if category.is_staff %}-->
-<!--                                                <i class="fas fa-check-circle"></i>-->
-<!--                                            {% else %}-->
-<!--                                                <i class="fas fa-times-circle"></i>-->
-<!--                                            {% endif %}-->
-<!--                                        </td>-->
-<!--                                        <td class="text-center">-->
-<!--                                            {% if category.is_active %}-->
-<!--                                                <i class="fas fa-check-circle"></i>-->
-<!--                                            {% else %}-->
-<!--                                                <i class="fas fa-times-circle"></i>-->
-<!--                                            {% endif %}-->
-<!--                                        </td>-->
+                                        <td class="text-center">
+                                            {% if category.is_active %}
+                                                <i class="fas fa-check-circle"></i>
+                                            {% else %}
+                                                <i class="fas fa-times-circle"></i>
+                                            {% endif %}
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
