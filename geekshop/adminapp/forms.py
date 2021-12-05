@@ -1,7 +1,7 @@
 from django import forms
 from authapp.forms import UserRegistrationForm, UserChangeProfileForm
 from authapp.models import User
-from mainapp.models import ProductCategory
+from mainapp.models import ProductCategory, Product
 
 
 class UserAdminRegisterForm(UserRegistrationForm):
@@ -40,6 +40,20 @@ class ProductCategoryEditForm(forms.ModelForm):
     class Meta:
         model = ProductCategory
         fields = ('name', 'description', 'is_active')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['rows'] = 1
+        # self.fields['description'].widget.attrs['columns'] = 15
+
+
+class ProductEditForm(forms.ModelForm):
+    class Meta:
+        model = Product
+        fields = ('name', 'description', 'image', 'price', 'quantity', 'is_active')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

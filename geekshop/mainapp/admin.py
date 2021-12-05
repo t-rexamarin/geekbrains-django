@@ -9,7 +9,7 @@ admin.site.register(ProductCategory)
 class Product(admin.ModelAdmin):
 
     list_display = ('name', 'price', 'quantity', 'category')
-    fields = ('name', 'short_desc', ('price', 'quantity'), 'category')
-    readonly_fields = ('short_desc',)
+    fields = ('name', 'description', ('price', 'quantity'), 'category')
+    readonly_fields = ('description',)
     ordering = ('name', 'price',)
     search_fields = ('name',)

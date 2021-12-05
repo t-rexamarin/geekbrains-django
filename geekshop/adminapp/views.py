@@ -7,7 +7,7 @@ from authapp.models import User
 
 
 # Create your views here.
-from mainapp.models import ProductCategory
+from mainapp.models import ProductCategory, Product
 
 
 @user_passes_test(lambda u: u.is_superuser)
@@ -129,3 +129,11 @@ def admin_categories_delete(request, pk):
         user.save()
 
     return HttpResponseRedirect(reverse('adminapp:admin_categories'))
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products(request):
+    context = {
+        'products': Product.objects.all()
+    }
+    return render(request, 'adminapp/admin-products-read.html', context)
