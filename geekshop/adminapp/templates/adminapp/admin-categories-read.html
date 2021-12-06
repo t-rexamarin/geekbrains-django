@@ -20,8 +20,6 @@
                                     <th>Дата создания</th>
                                     <th>Дата изменения</th>
                                     <th>Активна</th>
-<!--                                    <th>Персонал сайта</th>-->
-<!--                                    <th>Активный</th>-->
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -31,13 +29,11 @@
                                     <th>Дата создания</th>
                                     <th>Дата изменения</th>
                                     <th>Активна</th>
-<!--                                    <th>Персонал сайта</th>-->
-<!--                                    <th>Активный</th>-->
                                 </tr>
                                 </tfoot>
                                 <tbody>
                                 {% for category in categories %}
-                                    <tr>
+                                    <tr class="{% if not category.is_active %} inactive-obj {% endif %}">
                                         <td><a href="{% url 'adminapp:admin_categories_update' category.id %}" style="color: dodgerblue">{{ category.name }}</a></td>
                                         <td>{{ category.description }}</td>
                                         <td>{{ category.created_at }}</td>

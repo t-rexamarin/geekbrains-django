@@ -74,6 +74,16 @@ def admin_users_delete(request, pk):
 
 
 @user_passes_test(lambda u: u.is_superuser)
+def admin_users_restore(request, pk):
+    if request.method == 'POST':
+        user = User.objects.get(pk=pk)
+        user.is_active = True
+        user.save()
+
+    return HttpResponseRedirect(reverse('adminapp:admin_users'))
+
+
+@user_passes_test(lambda u: u.is_superuser)
 def admin_categories(request):
     context = {
         'categories': ProductCategory.objects.all()
@@ -126,6 +136,16 @@ def admin_categories_delete(request, pk):
     if request.method == 'POST':
         user = ProductCategory.objects.get(pk=pk)
         user.is_active = False
+        user.save()
+
+    return HttpResponseRedirect(reverse('adminapp:admin_categories'))
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_categories_restore(request, pk):
+    if request.method == 'POST':
+        user = ProductCategory.objects.get(pk=pk)
+        user.is_active = True
         user.save()
 
     return HttpResponseRedirect(reverse('adminapp:admin_categories'))
@@ -185,6 +205,16 @@ def admin_products_delete(request, pk):
     if request.method == 'POST':
         user = Product.objects.get(pk=pk)
         user.is_active = False
+        user.save()
+
+    return HttpResponseRedirect(reverse('adminapp:admin_products'))
+
+
+@user_passes_test(lambda u: u.is_superuser)
+def admin_products_restore(request, pk):
+    if request.method == 'POST':
+        user = Product.objects.get(pk=pk)
+        user.is_active = True
         user.save()
 
     return HttpResponseRedirect(reverse('adminapp:admin_products'))

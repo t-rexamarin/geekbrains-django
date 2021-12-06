@@ -20,8 +20,6 @@
                                     <th>Цена</th>
                                     <th>Количество</th>
                                     <th>Активен</th>
-<!--                                    <th>Персонал сайта</th>-->
-<!--                                    <th>Активный</th>-->
                                 </tr>
                                 </thead>
                                 <tfoot>
@@ -31,13 +29,11 @@
                                     <th>Цена</th>
                                     <th>Количество</th>
                                     <th>Активен</th>
-<!--                                    <th>Персонал сайта</th>-->
-<!--                                    <th>Активный</th>-->
                                 </tr>
                                 </tfoot>
                                 <tbody>
                                 {% for product in products %}
-                                    <tr>
+                                    <tr class="{% if not product.is_active %} inactive-obj {% endif %}">
                                         <td><a href="{% url 'adminapp:admin_products_update' product.id %}" style="color: dodgerblue">{{ product.name }}</a></td>
                                         <td>{{ product.description }}</td>
                                         <td>{{ product.price }}</td>
