@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
@@ -16,13 +17,22 @@ def index(request):
     return render(request, 'mainapp/index.html', context)
 
 
-def products(request):
+def products(request, page=1):
     productsCategories = ProductCategory.objects.all()
     products = Product.objects.all()
+    paginator = Paginator(products, per_page=3)
+
+    try:
+        products_paginator = paginator.page(page)
+    except PageNotAnInteger:
+        products_paginator = paginator.page(1)
+    except EmptyPage:
+        products_paginator = paginator.page(paginator.num_pages)
+
     context = {
         'title': 'GeekShop | Каталог',
         'productsCategories': productsCategories,
-        'products': products
+        'products': products_paginator
     }
 
     return render(request, 'mainapp/products.html', context)
@@ -53,7 +63,8 @@ def item(request, id):
 #
 #     return render(request, 'mainapp/products.html', context)
 
-
+# TODO:
+# перенести в products
 def category(request, id):
     if request.is_ajax():
         productsCategories = ProductCategory.objects.all()
