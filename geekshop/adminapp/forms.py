@@ -19,8 +19,6 @@ class UserAdminRegisterForm(UserRegistrationForm):
 
 
 class UserAdminProfileForm(UserChangeProfileForm):
-    # email = forms.EmailField(widget=forms.EmailInput(attrs={'class':'form-control py-4', 'readonly': False}))
-    # username = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control py-4', 'readonly': False}))
     email = forms.EmailField(widget=forms.EmailInput())
     username = forms.CharField(widget=forms.TextInput())
 
@@ -49,7 +47,6 @@ class ProductCategoryEditForm(forms.ModelForm):
         # self.fields['description'].widget.attrs['columns'] = 15
 
 
-# class ProductEditForm(forms.ModelForm):
 class ProductEditForm(forms.ModelForm):
     image = forms.ImageField(widget=forms.FileInput())
 

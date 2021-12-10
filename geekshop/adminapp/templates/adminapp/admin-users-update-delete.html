@@ -62,10 +62,18 @@
                         <div class="row">
                             <div class="col-lg-12" style="margin-top: 33px;">
                                 {% if user.is_active %}
-                                    <input class="btn  btn-danger btn-block" type="submit" value="Удалить">
+                                    <input class="btn  btn-warning btn-block" type="submit" value="Деактивировать">
                                 {% else %}
                                     <input class="btn  btn-success btn-block" type="submit" value="Восстановить">
                                 {% endif %}
+                            </div>
+                        </div>
+                    </form>
+                    <form action="{% url 'adminapp:admin_users_delete' user.id %}" method="post">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-12" style="margin-top: 33px;">
+                                    <input class="btn  btn-danger btn-block" type="submit" value="Удалить">
                             </div>
                         </div>
                     </form>

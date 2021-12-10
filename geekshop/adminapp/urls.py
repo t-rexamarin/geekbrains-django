@@ -1,8 +1,8 @@
 from django.urls import path
 from adminapp.views import index, UserListView, UserCreateView, UserUpdateView, UserDeleteView, \
-    admin_categories_create, admin_categories_update, admin_categories_delete, admin_products, \
-    admin_products_create, admin_products_update, admin_products_delete, admin_categories_restore, \
-    admin_products_restore, UserDeactivateDeleteView, UserRestoreDeleteView, CategoriesListView
+    UserDeactivateDeleteView, UserRestoreDeleteView, CategoryListView, CategoryCreateView, \
+    CategoryUpdateView, CategoryDeleteView, CategoryDeactivateDeleteView, CategoryRestoreDeleteView, ProductListView, \
+    ProductCreateView, ProductUpdateView, ProductDeleteView, ProductRestoreDeleteView, ProductDeactivateDeleteView
 
 app_name = 'adminapp'
 urlpatterns = [
@@ -14,15 +14,17 @@ urlpatterns = [
     path('users-deactivate/<int:pk>', UserDeactivateDeleteView.as_view(), name='admin_users_deactivate'),
     path('users-restore/<int:pk>', UserRestoreDeleteView.as_view(), name='admin_users_restore'),
 
-    path('categories/', CategoriesListView.as_view(), name='admin_categories'),
-    path('categories-create/', admin_categories_create, name='admin_categories_create'),
-    path('categories-update/<int:pk>', admin_categories_update, name='admin_categories_update'),
-    path('categories-delete/<int:pk>', admin_categories_delete, name='admin_categories_delete'),
-    path('categories-restore/<int:pk>', admin_categories_restore, name='admin_categories_restore'),
+    path('categories/', CategoryListView.as_view(), name='admin_categories'),
+    path('categories-create/', CategoryCreateView.as_view(), name='admin_categories_create'),
+    path('categories-update/<int:pk>', CategoryUpdateView.as_view(), name='admin_categories_update'),
+    path('categories-delete/<int:pk>', CategoryDeleteView.as_view(), name='admin_categories_delete'),
+    path('categories-deactivate/<int:pk>', CategoryDeactivateDeleteView.as_view(), name='admin_categories_deactivate'),
+    path('categories-restore/<int:pk>', CategoryRestoreDeleteView.as_view(), name='admin_categories_restore'),
 
-    path('products/', admin_products, name='admin_products'),
-    path('products-create/', admin_products_create, name='admin_products_create'),
-    path('products-update/<int:pk>', admin_products_update, name='admin_products_update'),
-    path('products-delete/<int:pk>', admin_products_delete, name='admin_products_delete'),
-    path('products-restore/<int:pk>', admin_products_restore, name='admin_products_restore'),
+    path('products/', ProductListView.as_view(), name='admin_products'),
+    path('products-create/', ProductCreateView.as_view(), name='admin_products_create'),
+    path('products-update/<int:pk>', ProductUpdateView.as_view(), name='admin_products_update'),
+    path('products-delete/<int:pk>', ProductDeleteView.as_view(), name='admin_products_delete'),
+    path('products-deactivate/<int:pk>', ProductDeactivateDeleteView.as_view(), name='admin_products_deactivate'),
+    path('products-restore/<int:pk>', ProductRestoreDeleteView.as_view(), name='admin_products_restore'),
 ]
