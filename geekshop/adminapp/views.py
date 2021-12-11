@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse, reverse_lazy
 from django.utils.decorators import method_decorator
-from django.views.generic import ListView, CreateView, UpdateView, DeleteView
+from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from adminapp.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryEditForm, ProductEditForm
 from authapp.models import User
 from mainapp.models import ProductCategory, Product
@@ -15,9 +15,17 @@ from mainapp.models import ProductCategory, Product
 # допустим если вы супер админ добавьте флаг на форму который подтвердит удаления
 # если валидно - удалить, если нет, деактивировать
 
-@user_passes_test(lambda u: u.is_superuser)
-def index(request):
-    return render(request, 'adminapp/admin.html')
+# @user_passes_test(lambda u: u.is_superuser)
+# def index(request):
+#     return render(request, 'adminapp/admin.html')
+
+
+class IndexTemplateView(TemplateView):
+    template_name = 'adminapp/admin.html'
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(IndexTemplateView, self).dispatch(request, *args, **kwargs)
 
 
 class UserListView(ListView):
