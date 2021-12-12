@@ -6,7 +6,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, TemplateView
 from adminapp.forms import UserAdminRegisterForm, UserAdminProfileForm, ProductCategoryEditForm, ProductEditForm
 from authapp.models import User
-from mainapp.mixin import BaseClassContentMixin, CustomDispatchMixin
+from mainapp.mixin import BaseClassContextMixin, CustomDispatchMixin
 from mainapp.models import ProductCategory, Product
 
 
@@ -17,18 +17,18 @@ from mainapp.models import ProductCategory, Product
 # если валидно - удалить, если нет, деактивировать
 
 
-class IndexTemplateView(TemplateView, BaseClassContentMixin, CustomDispatchMixin):
+class IndexTemplateView(TemplateView, BaseClassContextMixin, CustomDispatchMixin):
     template_name = 'adminapp/admin.html'
     title = 'GeekShop | Admin'
 
 
-class UserListView(ListView, BaseClassContentMixin, CustomDispatchMixin):
+class UserListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
     model = User
     template_name = 'adminapp/admin-users-read.html'
     title = 'Админка | Пользователи'
 
 
-class UserCreateView(CreateView, BaseClassContentMixin, CustomDispatchMixin):
+class UserCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
     model = User
     template_name = 'adminapp/admin-users-create.html'
     title = 'Админка | Пользователи'
@@ -36,7 +36,7 @@ class UserCreateView(CreateView, BaseClassContentMixin, CustomDispatchMixin):
     success_url = reverse_lazy('adminapp:admin_users')
 
 
-class UserUpdateView(UpdateView, BaseClassContentMixin, CustomDispatchMixin):
+class UserUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     model = User
     template_name = 'adminapp/admin-users-update-delete.html'
     title = 'Админка | Редактирование пользователя'
@@ -83,13 +83,13 @@ class UserRestoreDeleteView(DeleteView, CustomDispatchMixin):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class CategoryListView(ListView, BaseClassContentMixin, CustomDispatchMixin):
+class CategoryListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
     model = ProductCategory
     template_name = 'adminapp/admin-categories-read.html'
     title = 'Админка | Категории'
 
 
-class CategoryCreateView(CreateView, BaseClassContentMixin, CustomDispatchMixin):
+class CategoryCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
     model = ProductCategory
     template_name = 'adminapp/admin-categories-create.html'
     title = 'Админка | Создать категорию'
@@ -97,7 +97,7 @@ class CategoryCreateView(CreateView, BaseClassContentMixin, CustomDispatchMixin)
     success_url = reverse_lazy('adminapp:admin_categories')
 
 
-class CategoryUpdateView(UpdateView, BaseClassContentMixin, CustomDispatchMixin):
+class CategoryUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     model = ProductCategory
     template_name = 'adminapp/admin-categories-update-delete.html'
     title = 'Админка | Редактировать категорию'
@@ -144,13 +144,13 @@ class CategoryRestoreDeleteView(DeleteView, CustomDispatchMixin):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class ProductListView(ListView, BaseClassContentMixin, CustomDispatchMixin):
+class ProductListView(ListView, BaseClassContextMixin, CustomDispatchMixin):
     model = Product
     template_name = 'adminapp/admin-products-read.html'
     title = 'Админка | Продукты'
 
 
-class ProductCreateView(CreateView, BaseClassContentMixin, CustomDispatchMixin):
+class ProductCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
     model = Product
     template_name = 'adminapp/admin-products-create.html'
     title = 'Админка | Создание продукта'
@@ -158,7 +158,7 @@ class ProductCreateView(CreateView, BaseClassContentMixin, CustomDispatchMixin):
     success_url = reverse_lazy('adminapp:admin_products')
 
 
-class ProductUpdateView(UpdateView, BaseClassContentMixin, CustomDispatchMixin):
+class ProductUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     model = Product
     template_name = 'adminapp/admin-products-update-delete.html'
     title = 'Админка | Редактирование продукта'
