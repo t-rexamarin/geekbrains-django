@@ -1,94 +1,66 @@
-from django.contrib import auth, messages
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+from django.contrib.auth.views import LoginView, LogoutView
 from django.http import HttpResponseRedirect
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
+from django.views.generic import FormView, UpdateView
+from mainapp.mixin import BaseClassContextMixin, UserDispatchMixin
 from authapp.forms import UserLoginForm, UserRegistrationForm, UserChangeProfileForm
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from authapp.models import User
 from baskets.models import Basket
 
 
 # Create your views here.
-def login(request):
-    if request.method == 'POST':
-        form = UserLoginForm(data=request.POST)
-
-        if form.is_valid():
-            username = request.POST.get('username')
-            password = request.POST.get('password')
-            user = auth.authenticate(username=username, password=password)
-
-            if user.is_active:
-                auth.login(request, user)
-                return HttpResponseRedirect(reverse('index'))
-    else:
-        form = UserLoginForm()
-
-    context = {
-        'title': 'GeekShop | Авторизация',
-        'form': form
-    }
-
-    return render(request, 'authapp/login.html', context)
+class LoginListView(LoginView, BaseClassContextMixin):
+    template_name = 'authapp/login.html'
+    form_class = UserLoginForm
+    title = 'GeekShop | Авторизация'
 
 
-def logout(request):
-    auth.logout(request)
-
-    return HttpResponseRedirect(reverse('index'))
+class Logout(LogoutView):
+    template_name = 'mainapp/index.html'
 
 
-def registration(request):
-    if request.method == 'POST':
-        form = UserRegistrationForm(data=request.POST)
+class RegistrationListView(FormView, BaseClassContextMixin):
+    model = User
+    form_class = UserRegistrationForm
+    template_name = 'authapp/registration.html'
+    title = 'GeekShop | Регистрация'
+    success_url = reverse_lazy('authapp:login')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(data=request.POST)
 
         if form.is_valid():
             form.save()
             success_txt = 'Registration successful.'
             messages.success(request, success_txt)
             return HttpResponseRedirect(reverse('authapp:login'))
-    else:
-        form = UserRegistrationForm()
-
-    context = {
-        'title': 'GeekShop | Регистрация',
-        'form': form
-    }
-
-    return render(request, 'authapp/registration.html', context)
-
-
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        form = UserChangeProfileForm(instance=request.user, data=request.POST, files=request.FILES)
-        if form.is_valid():
-            success_txt = 'Changes were successfully saved.'
-            messages.success(request, success_txt)
-            form.save()
         else:
-            # messages.set_level(request, messages.ERROR)
-            # messages.error(request, form.errors)
-            # print(form.errors)
-            # print(form.non_field_errors())
-            # error_txt = 'Changes were successfully saved.'
             errors = [err_text for err_text in [form_field.errors for form_field in form] if len(err_text) > 0]
-            # print(errors)
             messages.error(request, errors)
 
-    total_quantity = 0
-    total_sum = 0
-    baskets = Basket.objects.filter(user=request.user)
+        return render(request, self.template_name, {'form': form})
 
-    for basket in baskets:
-        total_quantity += basket.quantity
-        total_sum = basket.sum()
 
-    context = {
-        'title': 'GeekShop | Профиль',
-        'form': UserChangeProfileForm(instance=request.user),
-        'baskets': baskets,
-        'total_quantity': total_quantity,
-        'total_sum': total_sum
-    }
+class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
+    form_class = UserChangeProfileForm
+    template_name = 'authapp/profile.html'
+    title = 'GeekShop | Профиль'
+    success_url = 'authapp:profile'
 
-    return render(request, 'authapp/profile.html', context)
+    def form_valid(self, form):
+        success_txt = 'Changes were successfully saved.'
+        messages.success(self.request, success_txt)
+        super(ProfileFormView, self).form_valid()
+
+        return HttpResponseRedirect(self.get_success_url())
+
+    def get_object(self, *args, **kwargs):
+        return get_object_or_404(User, pk=self.request.user.pk)
+
+    def get_context_data(self, **kwargs):
+        context = super(ProfileFormView, self).get_context_data(**kwargs)
+        context['baskets'] = Basket.objects.filter(user=self.request.user)
+
+        return context
