@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'authapp',
     'baskets',
     'adminapp',
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -161,3 +162,18 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = True if os.getenv('EMAIL_USE_TLS') == 'True' else False
 
 EMAIL_FILE_PATH = 'tmp/emails/'
+
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '8028733'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'Ixja3FvjrIKOMT8aWJyX'
+SOCIAL_AUTH_VK_OAUTH2_API_VERSION = '5.131'
+SOCIAL_AUTH_VK_OAUTH2_IGNORE_DEFAULT_SCOPE = True
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email']
+
+AUTHENTICATION_BACKENDS = (
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2',
+)
+
+# id = 8028733
+# key = Ixja3FvjrIKOMT8aWJyX
