@@ -1,27 +1,10 @@
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
-from django.shortcuts import render
+from django.http import JsonResponse
 from django.template.loader import render_to_string
-
+from django.urls import reverse_lazy
+from django.views.generic import DeleteView
 from baskets.models import Basket
 from mainapp.models import Product
-
-
-# Create your views here.
-# @login_required
-# def basket_add(request, id):
-#     user_select = request.user
-#     product = Product.objects.get(id=id)
-#     baskets = Basket.objects.filter(user=user_select, product=product)
-#
-#     if baskets:
-#         basket = baskets.first()
-#         basket.quantity += 1
-#         basket.save()
-#     else:
-#         Basket.objects.create(user=user_select, product=product, quantity=1)
-#
-#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
 @login_required
@@ -45,20 +28,23 @@ def basket_add(request, id):
         return JsonResponse({'result': result})
 
 
-# @login_required
-# def basket_remove(request, basket_id):
-#     Basket.objects.get(id=basket_id).delete()
-#     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+class BasketDeleteView(DeleteView):
+    model = Basket
+    success_url = reverse_lazy('authapp:profile')
+    template_name = 'authapp/profile.html'
 
+    def get(self, *args, **kwargs):
+        """
+        This has been overriden because by default
+        DeleteView doesn't work with GET requests
+        """
+        self.delete(*args, **kwargs)
 
-@login_required
-def basket_remove(request, basket_id):
-    if request.is_ajax():
-        Basket.objects.get(id=basket_id).delete()
-
-        baskets = Basket.objects.filter(user=request.user)
-        context = {'baskets': baskets}
-        result = render_to_string('baskets/basket.html', context)
+        if self.request.is_ajax():
+            context = super(BasketDeleteView, self).get_context_data(**kwargs)
+            baskets = Basket.objects.filter(user=self.request.user)
+            context['baskets'] = baskets
+            result = render_to_string('baskets/basket.html', context)
 
         return JsonResponse({'result': result})
 

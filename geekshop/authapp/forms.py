@@ -1,3 +1,5 @@
+import hashlib
+import random
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
@@ -37,6 +39,14 @@ class UserRegistrationForm(UserCreationForm):
 
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
+
+    def save(self, commit=True):
+        user = super(UserRegistrationForm, self).save()
+        user.is_active = False
+        salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:6]
+        user.activation_key = hashlib.sha1((user.email + salt).encode('utf-8')).hexdigest()
+        user.save()
+        return user
 
     # сами определяем валидаторы для полей
     def clean_username(self):
