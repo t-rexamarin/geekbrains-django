@@ -10,13 +10,14 @@ from mainapp.mixin import BaseClassContextMixin, UserDispatchMixin
 from authapp.forms import UserLoginForm, UserRegistrationForm, UserChangeProfileForm
 from django.shortcuts import render, get_object_or_404
 from authapp.models import User
-from baskets.models import Basket
 
 
 # Create your views here.
 # TODO:
-# если логиниться под неактивным аккаунтом, то будет говорить, проверьте пару логин-пароль
+# 1) если логиниться под неактивным аккаунтом, то будет говорить, проверьте пару логин-пароль
 # а не то, что аккаунт неактивен. Разобраться с этим моментом
+# 2) resend email наверно стоит как то через verify делать
+
 class LoginListView(LoginView, BaseClassContextMixin):
     template_name = 'authapp/login.html'
     form_class = UserLoginForm
@@ -42,8 +43,13 @@ class RegistrationListView(FormView, BaseClassContextMixin):
 
             if self.send_verify_link(user):
                 success_txt = _('Registration successful.')
-                messages.success(request, success_txt)
-                return HttpResponseRedirect(reverse('authapp:login'))
+                messages.success(request, success_txt, extra_tags='registration_success')
+                # messages.add_message(request, messages.SUCCESS, success_txt, extra_tags='registration_success')
+                return self.email_confirmation(user)
+                # return HttpResponseRedirect(reverse('authapp:email-confirmation'))
+                # return HttpResponseRedirect(reverse('authapp:login'))
+                # return render(self.request, 'authapp/verification.html', args=[user.email, user.activation_key])
+                # return HttpResponseRedirect(reverse('authapp:resend', args=[user.email, user.activation_key]))
             else:
                 errors = [err_text for err_text in [form_field.errors for form_field in form] if len(err_text) > 0]
                 messages.error(request, errors)
@@ -55,8 +61,10 @@ class RegistrationListView(FormView, BaseClassContextMixin):
 
     def send_verify_link(self, user):
         verify_link = reverse('authapp:verify', args=[user.email, user.activation_key])
-        subject = _(f'To activate your account {user.username} follow the link')
-        message = _(f'To verify your account {user.username} on resource \n{settings.DOMAIN_NAME}{verify_link}')
+        # subject = _(f'To activate your account {user.username} follow the link')
+        subject = _(f'Account {user.username} activation')
+        message = _(f'To verify your account {user.username} on resource {settings.DOMAIN_NAME}\n'
+                    f'click the link {settings.DOMAIN_NAME}{verify_link}')
         return send_mail(subject, message, settings.EMAIL_HOST_USER, [user.email], fail_silently=False)
 
     def verify(self, email, activation_key):
@@ -71,8 +79,36 @@ class RegistrationListView(FormView, BaseClassContextMixin):
 
             return render(self, 'authapp/verification.html')
         except Exception as e:
-            print(e)
             return HttpResponseRedirect(reverse('index'))
+
+    # тут что то страшное
+    # пришлось вытягивать из головы крупицы знаний по ООП
+    # все это пришлось сделать из-за того, что в self приходил реквест, а не класс
+    @classmethod
+    def get_user(cls, request, email):
+        user = User.objects.get(email=email)
+        context = {
+            'email': user.email
+        }
+
+        if user:
+            print(user)
+            if cls.send_verify_link(cls, user):
+                return render(request, 'authapp/verification.html', context=context)
+
+    def email_confirmation(self, user):
+        email = user.email
+        activation_key = user.activation_key
+
+        context = {
+            # это анонимный юзер, под которым мы находимся в данный момент
+            # чтобы user.is_authenticated вел себя корректно в шаблоне
+            'user': self.request.user,
+            'email': email,
+            'activation_key': activation_key
+        }
+        return render(self.request, 'authapp/verification.html', context=context)
+        # return HttpResponseRedirect(reverse('authapp:resend', args=[self.user.email, self.user.activation_key]))
 
 
 class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
@@ -91,8 +127,8 @@ class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
     def get_object(self, *args, **kwargs):
         return get_object_or_404(User, pk=self.request.user.pk)
 
-    def get_context_data(self, **kwargs):
-        context = super(ProfileFormView, self).get_context_data(**kwargs)
-        context['baskets'] = Basket.objects.filter(user=self.request.user)
-
-        return context
+    # def get_context_data(self, **kwargs):
+    #     context = super(ProfileFormView, self).get_context_data(**kwargs)
+    #     context['baskets'] = Basket.objects.filter(user=self.request.user)
+    #
+    #     return context

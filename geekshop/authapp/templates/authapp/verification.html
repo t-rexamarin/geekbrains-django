@@ -13,6 +13,9 @@
                 <h4>Пользователь {{ user.username }} подтвержден.</h4>
             {% else %}
                 <h3>Верификация не пройдена.</h3>
+                <br>
+                <h4>Если вы не получили письмо, попробуйте выслать еще одно</h4>
+                <a href="{% url 'authapp:resend' email %}" class="">Выслать новое письмо</a>
             {% endif %}
             <br>
             <button class="btn btn-round form-control">
