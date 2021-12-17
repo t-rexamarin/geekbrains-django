@@ -7,8 +7,8 @@ from django.utils.translation import gettext as _
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, UpdateView
 from mainapp.mixin import BaseClassContextMixin, UserDispatchMixin
-from authapp.forms import UserLoginForm, UserRegistrationForm, UserChangeProfileForm
-from django.shortcuts import render, get_object_or_404
+from authapp.forms import UserLoginForm, UserRegistrationForm, UserChangeProfileForm, UserProfileEditForm
+from django.shortcuts import render, get_object_or_404, redirect
 from authapp.models import User
 
 
@@ -117,18 +117,24 @@ class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
     title = 'GeekShop | Профиль'
     success_url = 'authapp:profile'
 
+    def post(self, request, *args, **kwargs):
+        form = UserProfileEditForm(data=request.POST, files=request.FILES, instance=request.user)
+        profile_form = UserProfileEditForm(request.POST, instance=request.user.userprofile)
+
+        if form.is_valid() and profile_form.is_valid():
+            form.save()
+            return redirect(self.success_url)
+
     def form_valid(self, form):
         success_txt = _('Changes were successfully saved.')
         messages.success(self.request, success_txt)
         super().form_valid(form)
-
         return HttpResponseRedirect(self.get_success_url())
 
     def get_object(self, *args, **kwargs):
         return get_object_or_404(User, pk=self.request.user.pk)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(ProfileFormView, self).get_context_data(**kwargs)
-    #     context['baskets'] = Basket.objects.filter(user=self.request.user)
-    #
-    #     return context
+    def get_context_data(self, **kwargs):
+        context = super(ProfileFormView, self).get_context_data(**kwargs)
+        context['profile'] = UserProfileEditForm(instance=self.request.user.userprofile)
+        return context
