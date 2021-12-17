@@ -75,7 +75,7 @@ class RegistrationListView(FormView, BaseClassContextMixin):
                 user.activation_key_expires = None
                 user.is_active = True
                 user.save()
-                auth.login(self, user)
+                auth.login(self, user, backend=settings.AUTHENTICATION_BACKENDS[0])
 
             return render(self, 'authapp/verification.html')
         except Exception as e:
@@ -92,7 +92,6 @@ class RegistrationListView(FormView, BaseClassContextMixin):
         }
 
         if user:
-            print(user)
             if cls.send_verify_link(cls, user):
                 return render(request, 'authapp/verification.html', context=context)
 
