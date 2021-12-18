@@ -104,8 +104,13 @@ class UserProfileEditForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(UserProfileEditForm, self).__init__(*args, **kwargs)
+        dropdown_fields = ['gender', 'language']
+
         for field_name, field in self.fields.items():
-            if field_name != 'gender':
+            if field_name not in dropdown_fields:
                 field.widget.attrs['class'] = 'form-control py-4'
             else:
                 field.widget.attrs['class'] = 'form-control'
+
+            if field_name == 'about':
+                field.widget.attrs['rows'] = 3
