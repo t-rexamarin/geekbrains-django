@@ -1,7 +1,9 @@
+import hashlib
+import random
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext as _
-from authapp.models import User
+from authapp.models import User, UserProfile
 from django import forms
 
 from authapp.validators import clean_firstname
@@ -37,6 +39,14 @@ class UserRegistrationForm(UserCreationForm):
 
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
+
+    def save(self, commit=True):
+        user = super(UserRegistrationForm, self).save()
+        user.is_active = False
+        salt = hashlib.sha1(str(random.random()).encode('utf-8')).hexdigest()[:6]
+        user.activation_key = hashlib.sha1((user.email + salt).encode('utf-8')).hexdigest()
+        user.save()
+        return user
 
     # сами определяем валидаторы для полей
     def clean_username(self):
@@ -85,3 +95,22 @@ class UserChangeProfileForm(UserChangeForm):
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
+
+
+class UserProfileEditForm(forms.ModelForm):
+    class Meta:
+        model = UserProfile
+        exclude = ('user',)
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileEditForm, self).__init__(*args, **kwargs)
+        dropdown_fields = ['gender', 'language']
+
+        for field_name, field in self.fields.items():
+            if field_name not in dropdown_fields:
+                field.widget.attrs['class'] = 'form-control py-4'
+            else:
+                field.widget.attrs['class'] = 'form-control'
+
+            if field_name == 'about':
+                field.widget.attrs['rows'] = 3
