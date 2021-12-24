@@ -53,6 +53,11 @@ class Order(models.Model):
         self.is_active = False
         self.save()
 
+    # TODO:
+    # поэксперементировать с выводом в темплейт
+    def get_current_status(self):
+        return self.status
+
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, verbose_name='заказ', related_name='orderitems', on_delete=models.CASCADE)
