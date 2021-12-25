@@ -2,6 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.utils.timezone import now
 
+from baskets.models import Basket
 from mainapp.models import Product
 from django.utils.translation import gettext as _
 
@@ -66,3 +67,7 @@ class OrderItem(models.Model):
 
     def get_product_cost(self):
         return self.product.price * self.quantity
+
+    @staticmethod
+    def get_item(pk):
+        return Basket.objects.get(pk=pk).quantity
