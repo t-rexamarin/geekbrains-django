@@ -2,7 +2,7 @@ from django.db import transaction
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 from django.forms import inlineformset_factory
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.utils.translation import gettext as _
@@ -12,6 +12,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DetailView, D
 # Create your views here.
 from baskets.models import Basket
 from mainapp.mixin import BaseClassContextMixin
+from mainapp.models import Product
 from ordersapp.forms import OrderItemsForm
 from ordersapp.models import Order, OrderItem
 
@@ -144,6 +145,17 @@ def order_status_change(request, pk, cancel=0):
 
     order.save()
     return HttpResponseRedirect(reverse('orders:list'))
+
+
+def get_product_price(request, pk):
+    if request.is_ajax():
+        product = Product.objects.get(pk=pk)
+
+        if product:
+            price = product.price
+            return JsonResponse({'price': price})
+        else:
+            return JsonResponse({'price': 0})
 
 
 # # вызывается при сохранении корзины или заказа
