@@ -3,7 +3,7 @@ from django.db import models
 
 # Create your models here.
 class ProductCategory(models.Model):
-    name = models.CharField(verbose_name='имя', max_length=64, unique=True)
+    name = models.CharField(verbose_name='имя', max_length=128, unique=True)
     description = models.TextField(verbose_name='описание', blank=True)
     created_at = models.DateTimeField(verbose_name='дата создания', auto_now_add=True)
     updated_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
