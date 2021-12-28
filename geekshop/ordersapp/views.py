@@ -177,3 +177,4 @@ def get_product_price(request, pk):
 # def product_quantity_update_delete(sender, instance, **kwargs):
 #     instance.product.quantity += instance.quantity
 #     instance.save()
+#     instance.product.save()
