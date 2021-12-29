@@ -80,7 +80,14 @@ def save_user_profile(backend, user, response, *args, **kwargs):
         image_response = requests.get(image_url)
         # TODO:
         # подумать над форматом изображения
-        image_path_to_save = f'users_image/{user.pk}.jpg'
+        # No such file or directory:
+        # '/home/django/geekbrains-django/geekshop/media/users_image/2.jpg' если первое создание
+        user_images_dir = 'users_image/'
+        image_path_to_save = f'{user_images_dir}{user.pk}.jpg'
+
+        if not os.path.exists(os.path.join(settings.MEDIA_ROOT, user_images_dir)):
+            os.makedirs(os.path.join(settings.MEDIA_ROOT, user_images_dir))
+
         with open(os.path.join(settings.MEDIA_ROOT, image_path_to_save), 'wb') as f:
             f.write(image_response.content)
         user.image = image_path_to_save
