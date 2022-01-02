@@ -24,9 +24,12 @@ def index(request):
 # как то определять, что мы находимся на отфильтрованной категории?
 def products(request, category_id=None, page=1):
     if category_id:
-        products = Product.objects.filter(category_id=category_id)
+        # products = Product.objects.filter(category_id=category_id)
+        # select_related вытащит все связанные модели
+        products = Product.objects.filter(category_id=category_id).select_related('category')
     else:
-        products = Product.objects.all()
+        # products = Product.objects.all()
+        products = Product.objects.all().select_related('category')
 
     products_categories = ProductCategory.objects.all()
     paginator = Paginator(products, per_page=3)
