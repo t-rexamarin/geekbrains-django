@@ -9,7 +9,7 @@ from django.views.generic import FormView, UpdateView
 from mainapp.mixin import BaseClassContextMixin, UserDispatchMixin
 from authapp.forms import UserLoginForm, UserRegistrationForm, UserChangeProfileForm, UserProfileEditForm
 from django.shortcuts import render, get_object_or_404, redirect
-from authapp.models import User
+from authapp.models import User, UserProfile
 
 
 # Create your views here.
@@ -131,7 +131,8 @@ class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_object(self, *args, **kwargs):
-        return get_object_or_404(User, pk=self.request.user.pk)
+        # return get_object_or_404(User, pk=self.request.user.pk)
+        return UserProfile.objects.filter(user=self.request.user.pk).select_related().first()
 
     def get_context_data(self, **kwargs):
         context = super(ProfileFormView, self).get_context_data(**kwargs)

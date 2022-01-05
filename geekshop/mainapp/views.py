@@ -55,7 +55,7 @@ def products(request, category_id=None, page=1):
 
 
 def item(request, id):
-    product = Product.objects.get(id=id)
+    product = Product.objects.get(id=id).select_related()
     context = {
         'title': 'GeekShop | Детали товара',
         'product': product
