@@ -3,9 +3,24 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
 from .models import Product, ProductCategory
+from django.conf import settings
+from django.core.cache import cache
 
 
 # Create your views here.
+def get_link_category():
+    if settings.LOW_CHAHE:
+        key = 'link_category'
+        link_category = cache.get(key)
+        if link_category is None:
+            link_category = ProductCategory.objects.all()
+            cache.set(key, link_category)
+
+        return link_category
+    else:
+        return ProductCategory.objects.all()
+
+
 def index(request):
     context = {
         'title': 'GeekShop',
@@ -31,7 +46,8 @@ def products(request, category_id=None, page=1):
         # products = Product.objects.all()
         products = Product.objects.all().select_related('category')
 
-    products_categories = ProductCategory.objects.all()
+    # products_categories = ProductCategory.objects.all()
+    products_categories = get_link_category()
     paginator = Paginator(products, per_page=3)
 
     try:
