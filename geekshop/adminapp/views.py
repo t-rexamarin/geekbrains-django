@@ -111,6 +111,17 @@ class CategoryDeleteView(DeleteView, CustomDispatchMixin):
     form_class = ProductCategoryEditForm
     success_url = reverse_lazy('adminapp:admin_categories')
 
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.product_set.update(is_active=False)
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+    
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(CategoryDeleteView, self).dispatch(request, *args, **kwargs)
+
 
 class CategoryDeactivateDeleteView(DeleteView, CustomDispatchMixin):
     model = ProductCategory
