@@ -66,6 +66,7 @@ class Order(models.Model):
             'get_total_quantity': sum(list(map(lambda x: x.quantity, items)))
         }
 
+
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, verbose_name='заказ', related_name='orderitems', on_delete=models.CASCADE)
     product = models.ForeignKey(Product, verbose_name='продукты', on_delete=models.CASCADE)
