@@ -14,8 +14,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
-from mainapp.views import index, products
+from django.urls import path, include, re_path
+from mainapp.views import index
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -25,7 +25,15 @@ urlpatterns = [
     path('products/', include('mainapp.urls', namespace='mainapp')),
     path('user/', include('authapp.urls', namespace='authapp')),
     path('baskets/', include('baskets.urls', namespace='baskets')),
+    path('adminapp/', include('adminapp.urls', namespace='adminapp')),
+    path('orders/', include('ordersapp.urls', namespace='orders')),
+
+    # path('i18n/', include('django.conf.urls.i18n'))
+    path('', include('social_django.urls', namespace='social')),
 ]
 
 if settings.DEBUG:
+    import debug_toolbar
+
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [re_path(r'^__debug__/', include(debug_toolbar.urls))]

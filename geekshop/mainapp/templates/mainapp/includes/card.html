@@ -13,7 +13,8 @@
                             <a href="{% url 'mainapp:item' product.id %}">{{ product.name }}</a>
                         </h4>
                         <h5>{{ product.price }}</h5>
-                        <p class="card-text">{{ product.short_desc }}</p>
+                        <p class="card-text">{{ product.description }}</p>
+                        <p class="card-text">{{ product.category.name }}</p>
                     </div>
 
                     <div class="card-footer text-center">
@@ -31,4 +32,5 @@
             </div>
         {% endfor %}
     </div>
+    {% include 'mainapp/includes/navbar.html' %}
 </div>

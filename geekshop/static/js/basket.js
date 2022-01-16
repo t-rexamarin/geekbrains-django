@@ -2,14 +2,15 @@ window.onload = function() {
     function createAlert(parentElement) {
         let alertBlock = document.createElement('div');
 
-        alertBlock.setAttribute('id', 'success-alert');
-        alertBlock.className = 'custom-alert alert-success';
+//      быстрый костыль. Если алертов несколько, то плохо работает
+//        alertBlock.setAttribute('class', 'success-alert');
+        alertBlock.className = 'custom-alert alert-success success-alert';
         alertBlock.innerHTML = '<strong>Success!</strong> Product has been added to your cart';
         parentElement.insertAdjacentElement('beforeend', alertBlock);
 
-        $("#success-alert").fadeTo(1000, 500).slideUp(500, function() {
-            $("#success-alert").slideUp(500);
-            $("#success-alert").remove();
+        $(".success-alert").fadeTo(1000, 500).slideUp(500, function() {
+            $(".success-alert").slideUp(500);
+            $(".success-alert").remove();
         });
     }
 

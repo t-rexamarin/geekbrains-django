@@ -201,6 +201,7 @@ figure {
 img {
     vertical-align: middle;
     border-style: none;
+    max-width: 50%;
 }
 
 svg {
@@ -10876,4 +10877,8 @@ body {
 
 .sb-sidenav-light .sb-sidenav-footer {
     background-color: #e9ecef;
+}
+
+.inactive-obj {
+    background-color: #ffa50054
 }
