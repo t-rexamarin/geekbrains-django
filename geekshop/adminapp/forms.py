@@ -61,3 +61,19 @@ class ProductEditForm(forms.ModelForm):
             field.widget.attrs['class'] = 'form-control py-4'
 
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
+
+
+class CategoryUpdateFormAdmin(forms.ModelForm):
+    discount = forms.IntegerField(widget=forms.NumberInput(), label='скидка', required=False, min_value=0, max_value=90,
+                                  initial=0)
+
+    class Meta:
+        model = ProductCategory
+        fields = ('name', 'description', 'discount')
+
+    def __init__(self, *args, **kwargs):
+        super(CategoryUpdateFormAdmin, self).__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.widget.attrs['class'] = 'form-control'
+        self.fields['description'].widget.attrs['rows'] = 1
