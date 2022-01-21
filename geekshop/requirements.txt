@@ -10,15 +10,18 @@ django-debug-toolbar-template-profiler==2.0.2
 django-extensions==3.1.5
 gunicorn==20.1.0
 idna==3.3
+importlib-metadata==4.8.3
 oauthlib==3.1.1
 Pillow==8.4.0
 pkg_resources==0.0.0
+prettytable==2.5.0
 psycopg2-binary==2.9.2
 pycparser==2.21
 pydotplus==2.0.2
 PyJWT==2.3.0
 pyparsing==3.0.6
 python-dotenv==0.19.2
+python-memcached==1.59
 python3-openid==3.2.0
 pytz==2021.3
 requests==2.26.0
@@ -29,4 +32,6 @@ social-auth-core==4.1.0
 sqlparse==0.4.2
 typing-extensions==3.10.0.2
 urllib3==1.26.7
+wcwidth==0.2.5
 wrapt==1.13.3
+zipp==3.6.0
