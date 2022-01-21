@@ -23,11 +23,16 @@ class LoginListView(LoginView, BaseClassContextMixin):
     form_class = UserLoginForm
     title = 'GeekShop | Авторизация'
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return HttpResponseRedirect(reverse('index'))
+        # return HttpResponseRedirect(reverse('authapp:login'))
+        else:
+            context = {
+                'form': self.form_class
+            }
 
-    # def get(self, request, *args, **kwargs):
-    #     if request.user.is_authenticated:
-    #         return HttpResponseRedirect(reverse('index'))
-    #     return HttpResponseRedirect(reverse('authapp:login'))
+            return render(request, self.template_name, context)
 
 
 class Logout(LogoutView):
@@ -137,8 +142,8 @@ class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
         return HttpResponseRedirect(self.get_success_url())
 
     def get_object(self, *args, **kwargs):
-        # return get_object_or_404(User, pk=self.request.user.pk)
-        return UserProfile.objects.filter(user=self.request.user.pk).select_related().first()
+        return get_object_or_404(User, pk=self.request.user.pk)
+        # return UserProfile.objects.filter(user=self.request.user.pk).select_related().first()
 
     def get_context_data(self, **kwargs):
         context = super(ProfileFormView, self).get_context_data(**kwargs)
