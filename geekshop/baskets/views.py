@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import F
 from django.http import JsonResponse
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
@@ -16,7 +17,7 @@ def basket_add(request, id):
 
         if baskets:
             basket = baskets.first()
-            basket.quantity += 1
+            basket.quantity = F('quantity') + 1
             basket.save()
         else:
             Basket.objects.create(user=user_select, product=product, quantity=1)
