@@ -159,22 +159,21 @@ def get_product_price(request, pk):
 
 
 # # вызывается при сохранении корзины или заказа
-# @receiver(pre_save, sender=Basket)
-# @receiver(pre_save, sender=OrderItem)
-# def product_quantity_update_save(sender, instance, **kwargs):
-#     if instance.pk:
-#         get_item = instance.get_item(int(instance.pk))
-#         instance.product.quantity -= instance.quantity - get_item
-#     else:
-#         instance.product.quantity += instance.quantity
-#
-#     instance.save()
-#
-#
-# # вызывается при удалении корзины или заказа
-# @receiver(pre_delete, sender=Basket)
-# @receiver(pre_delete, sender=OrderItem)
-# def product_quantity_update_delete(sender, instance, **kwargs):
-#     instance.product.quantity += instance.quantity
-#     instance.save()
-#     instance.product.save()
+@receiver(pre_save, sender=Basket)
+@receiver(pre_save, sender=OrderItem)
+def product_quantity_update_save(sender, instance, **kwargs):
+    if instance.pk:
+        get_item = instance.get_item(int(instance.pk))
+        instance.product.quantity -= instance.quantity - get_item
+    else:
+        instance.product.quantity -= instance.quantity
+
+    instance.product.save()
+
+
+# вызывается при удалении корзины или заказа
+@receiver(pre_delete, sender=Basket)
+@receiver(pre_delete, sender=OrderItem)
+def product_quantity_update_delete(sender, instance, **kwargs):
+    instance.product.quantity += instance.quantity
+    instance.product.save()
