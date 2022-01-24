@@ -9,8 +9,8 @@ class ProductCategory(models.Model):
     updated_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
     is_active = models.BooleanField(verbose_name='активна', default=True, db_index=True)
 
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
 
     class Meta:
         verbose_name_plural = "ProductCategory"
@@ -28,7 +28,9 @@ class Product(models.Model):
     is_active = models.BooleanField(verbose_name='активна', default=True, db_index=True)
 
     def __str__(self):
-        return f"{self.name} ({self.category.name})"
+        # убирает 3 десятка буликатов в редактировании заказа
+        # return f"{self.name} ({self.category.name})"
+        return f"{self.name}"
 
     class Meta:
         verbose_name_plural = "Product"
