@@ -1,4 +1,5 @@
-from django.db import transaction
+from django.db import transaction, connection
+from django.db.models import F
 from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 from django.forms import inlineformset_factory
@@ -10,6 +11,7 @@ from django.views.generic import ListView, CreateView, UpdateView, DetailView, D
 
 
 # Create your views here.
+from adminapp.views import db_profile_by_type
 from baskets.models import Basket
 from mainapp.mixin import BaseClassContextMixin
 from mainapp.models import Product
@@ -49,7 +51,7 @@ class OrderCreate(CreateView, BaseClassContextMixin):
                     form.initial['quantity'] = basket_item[num].quantity
                     form.initial['price'] = basket_item[num].product.price
 
-                # basket_item.delete()
+                basket_item.delete()
             else:
                 formset = OrderFormSet()
 
@@ -158,22 +160,41 @@ def get_product_price(request, pk):
             return JsonResponse({'price': 0})
 
 
-# # вызывается при сохранении корзины или заказа
+# вызывается при сохранении корзины или заказа
+# TODO:
+# это ошибочное поведение, СПИШЕТСЯ 2 РАЗА В ТАКОМ СЛУЧАЕ
 @receiver(pre_save, sender=Basket)
 @receiver(pre_save, sender=OrderItem)
-def product_quantity_update_save(sender, instance, **kwargs):
-    if instance.pk:
-        get_item = instance.get_item(int(instance.pk))
-        instance.product.quantity -= instance.quantity - get_item
-    else:
-        instance.product.quantity -= instance.quantity
-
-    instance.product.save()
+# def product_quantity_update_save(sender, instance, **kwargs):
+#     if instance.pk:
+#         get_item = instance.get_item(int(instance.pk))
+#         print(instance.quantity)
+#         instance.product.quantity -= get_item
+#         # instance.product.quantity = F('quantity') - 1
+#         # instance.product.quantity -= F('quantity') - get_item
+#         # db_profile_by_type('learn db', '', connection.queries)
+#     else:
+#         # instance.product.quantity -= instance.quantity
+#         instance.product.quantity = F('quantity') - instance.quantity
+#
+#     instance.product.save()
 
 
 # вызывается при удалении корзины или заказа
+def product_quantity_update_save(sender, instance, **kwargs):
+    if instance.pk:
+        get_item = instance.get_item(int(instance.pk))
+        # instance.product.quantity -= instance.quantity - get_item  # при таком варианте, при увеличении
+                                                                   # продукта в корзине на 1 на втором шаге сразу будет 0 в базе
+        instance.product.quantity = instance.quantity - get_item  # а вот с этим вариантом шла запись и видно, что он криво считает
+    else:
+        instance.product.quantity -= instance.quantity
+    instance.product.save()
+
+
 @receiver(pre_delete, sender=Basket)
 @receiver(pre_delete, sender=OrderItem)
 def product_quantity_update_delete(sender, instance, **kwargs):
-    instance.product.quantity += instance.quantity
+    # instance.product.quantity += instance.quantity
+    instance.product.quantity = F('quantity') + instance.quantity
     instance.product.save()
