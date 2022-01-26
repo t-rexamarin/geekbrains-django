@@ -16,9 +16,9 @@
                 <div class="list-group categories">
                     {% for productCategory in productsCategories %}
                         {% comment %}
-<!--                        <a href="{% url 'mainapp:category' productCategory.id %}" class="list-group-item">{{ productCategory.name }}</a>-->
+<!--                            <a href="#" class="list-group-item" category="{{ productCategory.id }}">{{ productCategory.name }}</a>-->
                         {% endcomment %}
-                        <a href="#" class="list-group-item" category="{{ productCategory.id }}">{{ productCategory.name }}</a>
+                        <a href="{% url 'mainapp:category' productCategory.id 1 %}" class="list-group-item">{{ productCategory.name }}</a>
                     {% endfor %}
                 </div>
             </div>

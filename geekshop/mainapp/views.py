@@ -15,25 +15,33 @@ def get_link_category():
         key = 'link_category'
         link_category = cache.get(key)
         if link_category is None:
-            link_category = ProductCategory.objects.all()
+            link_category = ProductCategory.active_categories.all()
             cache.set(key, link_category)
 
         return link_category
     else:
-        return ProductCategory.objects.all()
+        return ProductCategory.active_categories.all()
 
 
-def get_link_product():
+def get_link_product(category_id):
     if settings.LOW_CACHE:
         key = 'link_product'
         link_product = cache.get(key)
         if link_product is None:
-            link_product = Product.objects.all().select_related('category')
+            if category_id:
+                link_product = Product.active_products.filter(category_id=category_id)
+            else:
+                link_product = Product.active_products.all().select_related('category')
             cache.set(key, link_product)
-
         return link_product
     else:
-        return Product.objects.all().select_related('category')
+        # return Product.objects.filter(is_active=True).select_related('category')
+        # return Product.active_products.all().select_related('category')
+        # return Product.active_products.filter(category_id=category_id).select_related('category')
+        if category_id:
+            return Product.active_products.filter(category_id=category_id).select_related('category')
+        else:
+            return Product.active_products.all().select_related('category')
 
 
 def get_product(pk):
@@ -68,15 +76,15 @@ def index(request):
 # @cache_page(3600)
 # @never_cache
 def products(request, category_id=None, page=1):
-    if category_id:
-        # products = Product.objects.filter(category_id=category_id)
-        # select_related вытащит все связанные модели
-        products = Product.objects.filter(category_id=category_id).select_related('category')
-    else:
-        # products = Product.objects.all()
-        products = Product.objects.all().select_related('category')
+    # if category_id:
+    #     # products = Product.objects.filter(category_id=category_id)
+    #     # select_related вытащит все связанные модели
+    #     products = Product.objects.filter(category_id=category_id, is_active=True).select_related('category')
+    # else:
+    #     # products = Product.objects.all()
+    #     products = Product.objects.filter(is_active=True).select_related('category')
 
-    products = get_link_product()
+    products = get_link_product(category_id)
 
     # products_categories = ProductCategory.objects.all()
     products_categories = get_link_category()
@@ -92,14 +100,16 @@ def products(request, category_id=None, page=1):
     context = {
         'title': 'GeekShop | Каталог',
         'productsCategories': products_categories,
-        'products': products_paginator
+        'products': products_paginator,
+        'category_id': category_id
     }
 
-    if request.is_ajax():
-        result = render_to_string('mainapp/includes/card.html', context)
-        return JsonResponse({'result': result})
-    else:
-        return render(request, 'mainapp/products.html', context)
+    # if request.is_ajax():
+    #     result = render_to_string('mainapp/includes/card.html', context)
+    #     return JsonResponse({'result': result})
+    # else:
+    #     return render(request, 'mainapp/products.html', context)
+    return render(request, 'mainapp/products.html', context)
 
 
 def item(request, id):
