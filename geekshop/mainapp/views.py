@@ -35,9 +35,6 @@ def get_link_product(category_id):
             cache.set(key, link_product)
         return link_product
     else:
-        # return Product.objects.filter(is_active=True).select_related('category')
-        # return Product.active_products.all().select_related('category')
-        # return Product.active_products.filter(category_id=category_id).select_related('category')
         if category_id:
             return Product.active_products.filter(category_id=category_id).select_related('category')
         else:
@@ -76,17 +73,7 @@ def index(request):
 # @cache_page(3600)
 # @never_cache
 def products(request, category_id=None, page=1):
-    # if category_id:
-    #     # products = Product.objects.filter(category_id=category_id)
-    #     # select_related вытащит все связанные модели
-    #     products = Product.objects.filter(category_id=category_id, is_active=True).select_related('category')
-    # else:
-    #     # products = Product.objects.all()
-    #     products = Product.objects.filter(is_active=True).select_related('category')
-
     products = get_link_product(category_id)
-
-    # products_categories = ProductCategory.objects.all()
     products_categories = get_link_category()
     paginator = Paginator(products, per_page=3)
 
@@ -113,7 +100,6 @@ def products(request, category_id=None, page=1):
 
 
 def item(request, id):
-    # product = Product.objects.get(id=id).select_related()
     context = {
         'title': 'GeekShop | Детали товара',
         # 'product': product
