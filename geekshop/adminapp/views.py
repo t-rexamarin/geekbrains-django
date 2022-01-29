@@ -58,7 +58,6 @@ class UserCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
             return render(request, self.template_name, {'form': form})
 
 
-
 class UserUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
     model = User
     template_name = 'adminapp/admin-users-update-delete.html'
