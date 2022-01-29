@@ -3,6 +3,7 @@ from django.contrib import messages, auth
 from django.contrib.auth.views import LoginView, LogoutView
 from django.core.mail import send_mail
 from django.http import HttpResponseRedirect
+from django.utils.safestring import mark_safe
 from django.utils.translation import gettext as _
 from django.urls import reverse, reverse_lazy
 from django.views.generic import FormView, UpdateView
@@ -128,11 +129,15 @@ class ProfileFormView(UpdateView, BaseClassContextMixin, UserDispatchMixin):
     success_url = 'authapp:profile'
 
     def post(self, request, *args, **kwargs):
-        form = UserProfileEditForm(data=request.POST, files=request.FILES, instance=request.user)
+        form = UserChangeProfileForm(data=request.POST, files=request.FILES, instance=request.user)
         profile_form = UserProfileEditForm(request.POST, instance=request.user.userprofile)
 
         if form.is_valid() and profile_form.is_valid():
             form.save()
+            return redirect(self.success_url)
+        else:
+            errors = [form_field.errors for form_field in form if len(form_field.errors) > 0]
+            messages.error(request, mark_safe('\n'.join(map(str, errors))))
             return redirect(self.success_url)
 
     def form_valid(self, form):

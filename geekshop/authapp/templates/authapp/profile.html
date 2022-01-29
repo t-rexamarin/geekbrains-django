@@ -15,14 +15,14 @@
                         <div class="alert {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show" role="alert"
                          style="margin-top: 50px;">
                             {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                                {% for msgs in message.message %}
-                                    {% for msg in msgs %}
-                                        <strong>{{ msg }}</strong>
+                                {% for msgs in messages %}
+
+                                        <strong>{{ msgs }}</strong>
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
-                                        <br>
-                                    {% endfor %}
+<!--                                        <br>-->
+
                                 {% endfor %}
                             {% else %}
                                 <strong>{{ message|striptags }}</strong>
