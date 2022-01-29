@@ -17,8 +17,8 @@ class ProductCategory(models.Model):
     updated_at = models.DateTimeField(verbose_name='дата изменения', auto_now=True)
     is_active = models.BooleanField(verbose_name='активна', default=True, db_index=True)
 
-    # def __str__(self):
-    #     return self.name
+    def __str__(self):
+        return self.name
 
     class Meta:
         verbose_name_plural = "ProductCategory"

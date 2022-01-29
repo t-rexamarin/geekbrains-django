@@ -5,17 +5,26 @@ from mainapp.models import ProductCategory, Product
 
 
 class UserAdminRegisterForm(UserRegistrationForm):
+    is_staff = forms.BooleanField()
+    is_active = forms.BooleanField()
+
     class Meta:
         model = User
-        fields = ('username', 'email', 'age', 'image', 'first_name', 'last_name', 'password1', 'password2')
+        fields = ('username', 'email', 'age', 'image', 'first_name', 'last_name', 'password1', 'password2',
+                  'is_staff', 'is_active')
 
     def __init__(self, *args, **kwargs):
         super(UserAdminRegisterForm, self).__init__(*args, **kwargs)
+        required_false = ('is_staff', 'is_active')
 
         for field_name, field in self.fields.items():
             field.widget.attrs['class'] = 'form-control py-4'
 
+            if field_name in required_false:
+                self.fields[field_name].required = False
+
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
+        self.fields['first_name'].widget.attrs.update({'autofocus': 'autofocus'})
 
 
 class UserAdminProfileForm(UserChangeProfileForm):
@@ -56,9 +65,13 @@ class ProductEditForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(ProductEditForm, self).__init__(*args, **kwargs)
+        dropdown_fields = ['category']
 
         for field_name, field in self.fields.items():
-            field.widget.attrs['class'] = 'form-control py-4'
+            if field_name not in dropdown_fields:
+                field.widget.attrs['class'] = 'form-control py-4'
+            else:
+                field.widget.attrs['class'] = 'form-control'
 
         self.fields['image'].widget.attrs['class'] = 'custom-file-input'
 

@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.db import connection
 from django.db.models import F
@@ -36,7 +37,26 @@ class UserCreateView(CreateView, BaseClassContextMixin, CustomDispatchMixin):
     template_name = 'adminapp/admin-users-create.html'
     title = 'Админка | Пользователи'
     form_class = UserAdminRegisterForm
-    success_url = reverse_lazy('adminapp:admin_users')
+    # success_url = reverse_lazy('adminapp:admin_users')
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(data=request.POST)
+
+        # пришлось идти каким то мудреным путем, чтобы активировать пользователя через форму админки
+        if form.is_valid():
+            active = form.instance.is_active
+            form.save()
+            if active:
+                user = User.objects.get(email=form.instance.email)
+                user.is_active = True
+                user.save()
+
+            return HttpResponseRedirect(reverse_lazy('adminapp:admin_users'))
+        else:
+            errors = [err_text for err_text in [form_field.errors for form_field in form] if len(err_text) > 0]
+            messages.error(request, errors)
+            return render(request, self.template_name, {'form': form})
+
 
 
 class UserUpdateView(UpdateView, BaseClassContextMixin, CustomDispatchMixin):
