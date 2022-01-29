@@ -161,40 +161,20 @@ def get_product_price(request, pk):
 
 
 # вызывается при сохранении корзины или заказа
-# TODO:
-# это ошибочное поведение, СПИШЕТСЯ 2 РАЗА В ТАКОМ СЛУЧАЕ
 @receiver(pre_save, sender=Basket)
 @receiver(pre_save, sender=OrderItem)
-# def product_quantity_update_save(sender, instance, **kwargs):
-#     if instance.pk:
-#         get_item = instance.get_item(int(instance.pk))
-#         print(instance.quantity)
-#         instance.product.quantity -= get_item
-#         # instance.product.quantity = F('quantity') - 1
-#         # instance.product.quantity -= F('quantity') - get_item
-#         # db_profile_by_type('learn db', '', connection.queries)
-#     else:
-#         # instance.product.quantity -= instance.quantity
-#         instance.product.quantity = F('quantity') - instance.quantity
-#
-#     instance.product.save()
-
-
 # вызывается при удалении корзины или заказа
 def product_quantity_update_save(sender, instance, **kwargs):
     if instance.pk:
         get_item = instance.get_item(int(instance.pk))
-        # instance.product.quantity -= instance.quantity - get_item  # при таком варианте, при увеличении
-                                                                   # продукта в корзине на 1 на втором шаге сразу будет 0 в базе
-        instance.product.quantity = instance.quantity - get_item  # а вот с этим вариантом шла запись и видно, что он криво считает
+        instance.product.quantity = F('quantity') - (instance.quantity - get_item)
     else:
-        instance.product.quantity -= instance.quantity
+        instance.product.quantity = F('quantity') - instance.quantity
     instance.product.save()
 
 
 @receiver(pre_delete, sender=Basket)
 @receiver(pre_delete, sender=OrderItem)
 def product_quantity_update_delete(sender, instance, **kwargs):
-    # instance.product.quantity += instance.quantity
     instance.product.quantity = F('quantity') + instance.quantity
     instance.product.save()
