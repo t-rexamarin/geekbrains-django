@@ -1,0 +1,41 @@
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
+            <a class="page-link" href="
+            {% if products.has_previous %}
+                {% if category_id %}
+                    {% url 'mainapp:category' category_id products.previous_page_number %}
+                {% else %}
+                    {% url 'mainapp:page' products.previous_page_number %}
+                {% endif %}
+            {% endif %}"
+               tabindex="-1" aria-disabled="true">Previous</a>
+        </li>
+        {% for page in products.paginator.page_range %}
+            <li class="page-item {% if page == products.number %} active {% endif %}">
+                {% if page == products.number %}
+                     <span class="page-link visually-hidden">{{ page }}</span>
+                {% else %}
+                    <a class="page-link" href="
+                        {% if category_id %}
+                            {% url 'mainapp:category' category_id page %}
+                        {% else %}
+                            {% url 'mainapp:page' page %}
+                        {% endif %}
+                    ">{{ page }}</a>
+                {% endif %}
+            </li>
+        {% endfor %}
+        <li class="page-item {% if not products.has_next %} disabled {% endif %}">
+            <a class="page-link" href="
+            {% if products.has_next %}
+                {% if category_id %}
+                    {% url 'mainapp:category' category_id products.next_page_number %}
+                {% else %}
+                    {% url 'mainapp:page' products.next_page_number %}
+                {% endif %}
+            {% endif %}">Next</a>
+
+        </li>
+    </ul>
+</nav>

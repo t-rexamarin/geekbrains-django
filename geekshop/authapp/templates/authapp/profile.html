@@ -15,14 +15,14 @@
                         <div class="alert {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %} alert-success {% else %} alert-warning {% endif %} alert-dismissible fade show" role="alert"
                          style="margin-top: 50px;">
                             {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-                                {% for msgs in message.message %}
-                                    {% for msg in msgs %}
-                                        <strong>{{ msg }}</strong>
+                                {% for msgs in messages %}
+
+                                        <strong>{{ msgs }}</strong>
                                         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
-                                        <br>
-                                    {% endfor %}
+<!--                                        <br>-->
+
                                 {% endfor %}
                             {% else %}
                                 <strong>{{ message|striptags }}</strong>
@@ -84,6 +84,22 @@
                         <div class="col-lg-6">
                             <label class="small mb-1" for="{{ form.age.id_for_label }}">Возраст</label>
                             {{ form.age }}
+                        </div>
+                        <div class="col-lg-6">
+                            <label class="small mb-1" for="{{ profile.gender.id_for_label }}">Пол</label>
+                            {{ profile.gender }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-6">
+                            <label class="small mb-1" for="{{ profile.language.id_for_label }}">Язык</label>
+                            {{ profile.language }}
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col-lg-12">
+                            <label class="small mb-1" for="{{ profile.about.id_for_label }}">О себе</label>
+                            {{ profile.about }}
                         </div>
                     </div>
                     <div class="form-row">

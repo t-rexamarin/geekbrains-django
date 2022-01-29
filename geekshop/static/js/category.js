@@ -4,7 +4,7 @@ $('.categories').on('click', 'a', function () {
 
     $.ajax(
         {
-            url: `/products/${cat_id}`,
+            url: `/products/category/${cat_id}`,
             success: function (data){
                 $('.card_add_basket').html(data.result);
             },
